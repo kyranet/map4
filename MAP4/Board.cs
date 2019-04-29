@@ -13,8 +13,6 @@ namespace Game
 
     public class Board
     {
-
-
         /// <summary>
         /// Matrix of chars that represent the board:
         /// - 0: Empty space
@@ -48,7 +46,7 @@ namespace Game
         /// <param name="maxItems">Max number of items contained in the board.</param>
         public Board(int r, int c, string textMap, int maxItems)
         {
-
+            
         }
 
         /// <summary>

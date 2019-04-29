@@ -1,6 +1,6 @@
-﻿using System;
+﻿    using System;
 
-namespace Listas
+namespace Game
 {
 	public class Lista{
 		class Nodo{
@@ -11,7 +11,6 @@ namespace Listas
 			public Nodo(int e){ dato = e; sig = null;}
 			public Nodo(int e, Nodo n){ 
 				dato = e; sig = n;
-
 			}
 
 		}
