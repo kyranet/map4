@@ -7,24 +7,27 @@ namespace Game
         /// <summary>
         /// Player position
         /// </summary>
-        int row, col;
+        private int row, col;
 
         /// <summary>
         /// A bag containing the items collected
         /// </summary>
-        Lista bag;
+        private Lista bag;
 
         /// <summary>
         /// The number collected items in the bag.
         /// </summary>
-        int numCollectedItems;
+        private int numCollectedItems;
 
         /// <summary>
         /// The player starts at 0,0 and with an empty bag
         /// </summary>
         public Player()
         {
-
+            row = 0;
+            col = 0;
+            bag = new Lista();
+            numCollectedItems = 0;
         }
 
         /// <summary>
@@ -36,7 +39,26 @@ namespace Game
         /// <param name="dir">Movement direction</param>
         public bool CanMoveInDirection(Board aBoard, Direction dir)
         {
-            
+            int x = col, y = row;
+            switch (dir)
+            {
+                case Direction.East:
+                    ++x;
+                    break;
+                case Direction.West:
+                    --x;
+                    break;
+                case Direction.North:
+                    --y;
+                    break;
+                case Direction.South:
+                    ++y;
+                    break;
+                default:
+                    throw new NotImplementedException("Unreachable.");
+            }
+
+            return aBoard.IsWallAt(x, y);
         }
 
         /// <summary>
@@ -49,7 +71,26 @@ namespace Game
         /// <param name="dir">Movement direction</param>
         public bool Move(Board aBoard, Direction dir)
         {
+            if (!CanMoveInDirection(aBoard, dir)) return false;
+            switch (dir)
+            {
+                case Direction.East:
+                    ++col;
+                    break;
+                case Direction.West:
+                    --col;
+                    break;
+                case Direction.North:
+                    --row;
+                    break;
+                case Direction.South:
+                    ++row;
+                    break;
+                default:
+                    throw new NotImplementedException("Unreachable.");
+            }
 
+            return true;
         }
 
         /// <summary>
@@ -58,9 +99,11 @@ namespace Game
         /// </summary>
         /// <returns><c>true</c>, if there is an item in player's position <c>false</c> otherwise.</returns>
         /// <param name="aBoard">The board where the player is moving</param>
-        public bool PickItem (Board aBoard)
+        public bool PickItem(Board aBoard)
         {
-
+            if (!aBoard.ContainsItem(row, col)) return false;
+            bag.insertaFin(aBoard.PickItem(row, col));
+            return true;
         }
 
         /// <summary>
@@ -70,7 +113,13 @@ namespace Game
         /// <param name="aBoard">The board where the player is moving.</param>
         public int InventoryValue(Board aBoard)
         {
+            var total = 0;
+            for (var i = 0; i < numCollectedItems; i++)
+            {
+                total += aBoard.GetItem(bag.nEsimo(i)).value;
+            }
 
+            return total;
         }
 
         /// <summary>
@@ -80,7 +129,7 @@ namespace Game
         /// <param name="aBoard">The board where the player is moving.</param>
         public bool GoalReached(Board aBoard)
         {
-
-        }      
+            return aBoard.IsGoalAt(row, col);
+        }
     }
 }
