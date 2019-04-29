@@ -7,27 +7,21 @@ namespace Game
         /// <summary>
         /// Player position
         /// </summary>
-        private int row, col;
+        private int _row, _col;
 
         /// <summary>
         /// A bag containing the items collected
         /// </summary>
-        private Lista bag;
-
-        /// <summary>
-        /// The number collected items in the bag.
-        /// </summary>
-        private int numCollectedItems;
+        private readonly ConnectedList _bag;
 
         /// <summary>
         /// The player starts at 0,0 and with an empty bag
         /// </summary>
         public Player()
         {
-            row = 0;
-            col = 0;
-            bag = new Lista();
-            numCollectedItems = 0;
+            _row = 0;
+            _col = 0;
+            _bag = new ConnectedList();
         }
 
         /// <summary>
@@ -39,7 +33,7 @@ namespace Game
         /// <param name="dir">Movement direction</param>
         public bool CanMoveInDirection(Board aBoard, Direction dir)
         {
-            int x = col, y = row;
+            int x = _col, y = _row;
             switch (dir)
             {
                 case Direction.East:
@@ -75,16 +69,16 @@ namespace Game
             switch (dir)
             {
                 case Direction.East:
-                    ++col;
+                    ++_col;
                     break;
                 case Direction.West:
-                    --col;
+                    --_col;
                     break;
                 case Direction.North:
-                    --row;
+                    --_row;
                     break;
                 case Direction.South:
-                    ++row;
+                    ++_row;
                     break;
                 default:
                     throw new NotImplementedException("Unreachable.");
@@ -101,8 +95,8 @@ namespace Game
         /// <param name="aBoard">The board where the player is moving</param>
         public bool PickItem(Board aBoard)
         {
-            if (!aBoard.ContainsItem(row, col)) return false;
-            bag.insertaFin(aBoard.PickItem(row, col));
+            if (!aBoard.ContainsItem(_row, _col)) return false;
+            _bag.PushLast(aBoard.PickItem(_row, _col));
             return true;
         }
 
@@ -114,9 +108,9 @@ namespace Game
         public int InventoryValue(Board aBoard)
         {
             var total = 0;
-            for (var i = 0; i < numCollectedItems; i++)
+            for (var i = 0; i < _bag.Count; i++)
             {
-                total += aBoard.GetItem(bag.nEsimo(i)).value;
+                total += aBoard.GetItem(_bag.At(i)).Value;
             }
 
             return total;
@@ -129,7 +123,7 @@ namespace Game
         /// <param name="aBoard">The board where the player is moving.</param>
         public bool GoalReached(Board aBoard)
         {
-            return aBoard.IsGoalAt(row, col);
+            return aBoard.IsGoalAt(_row, _col);
         }
     }
 }

@@ -1,18 +1,24 @@
 ﻿using System;
+
 namespace Game
 {
-    public enum Direction {North, East, South, West};
+    public enum Direction
+    {
+        North,
+        East,
+        South,
+        West
+    };
 
     public struct Item
-    { 
-        public int value;
-        public int row;
-        public int col;
+    {
+        public int Value;
+        public int Row;
+        public int Col;
     }
 
     public class Board
     {
-
         /// <summary>
         /// Matrix of chars that represent the board:
         /// - 0: Empty space
@@ -20,24 +26,24 @@ namespace Game
         /// - i: Item
         /// - g: Goal
         /// </summary>
-        char[,] map;
+        private readonly char[,] _map;
 
         /// <summary>
-        /// Number of rows and cols of the map
+        /// Number of rows of the map
         /// </summary>
-        int ROWS, COLS;
+        private readonly int _rows;
+
+        /// <summary>
+        /// Number of cols of the map
+        /// </summary>
+        private readonly int _cols;
 
         /// <summary>
         /// Array with the items contained in this board
         /// </summary>
-        Item[] itemsInBoard;
+        private readonly Item[] _itemsInBoard;
 
-        /// <summary>
-        /// The number items in this board.
-        /// </summary>
-        int numItemsInBoard;
-
-        int countNumsItems = 0;
+        private int _itemsCount = 0;
 
         /// <summary>
         /// Creates a new board. 
@@ -48,19 +54,19 @@ namespace Game
         /// <param name="maxItems">Max number of items contained in the board.</param>
         public Board(int r, int c, string textMap, int maxItems)
         {
-            ROWS = r;
-            COLS = c;
-            map = new char[r,c];
+            _rows = r;
+            _cols = c;
+            _map = new char[r, c];
             int aux = 0;
-            for(int i = 0; i<r;i++)
+            for (int i = 0; i < r; i++)
             {
-                for(int j = 0; j<c;j++)
+                for (int j = 0; j < c; j++)
                 {
-                    map[i, j] = textMap[aux];
+                    _map[i, j] = textMap[aux];
                 }
             }
-            numItemsInBoard = maxItems;
 
+            _itemsInBoard = new Item[maxItems];
         }
 
         /// <summary>
@@ -72,8 +78,7 @@ namespace Game
         /// <param name="c">column</param>
         public bool IsWallAt(int r, int c)
         {
-            if (r > ROWS || c > COLS || r < 0 || c < 0) { return false; }
-            else return true;
+            return r >= 0 && r < _rows && c >= 0 && c < _cols || _map[r, c] == 'w';
         }
 
         /// <summary>
@@ -84,21 +89,19 @@ namespace Game
         /// <param name="c">column</param>
         public bool ContainsItem(int r, int c)
         {
-            if (IsWallAt(r,c) ) { return false; }
-
-            int cont = 0;
-            bool end = false;
-            while(!end)
+            if (IsWallAt(r, c)) return false;
+            bool found = false;
+            int i = 0;
+            while (!found && i < _itemsCount)
             {
-                end = itemsInBoard[cont].col == r && itemsInBoard[cont].row == c;
-                if (itemsInBoard[cont].col == r && itemsInBoard[cont].row == c)
+                var item = _itemsInBoard[i];
+                if (item.Row == r && item.Col == c)
                 {
-                    end ) 
+                    found = true;
                 }
-
             }
 
-            
+            return found;
         }
 
         /// <summary>
@@ -112,18 +115,15 @@ namespace Game
         /// <param name="value">Item value</param>
         public bool AddItem(int r, int c, int value)
         {
-            if ((IsWallAt(r,c)) || (countNumsItems > numItemsInBoard))
-            {
-                Item currItem = new Item();
-                currItem.col = c;
-                currItem.row = r;
-                currItem.value = value;
-                itemsInBoard[countNumsItems] = currItem;
-                return true;
-            }
-            else { return false; }
-        }
+            if (IsWallAt(r, c) || _itemsCount == _itemsInBoard.Length) return false;
 
+            var currItem = new Item
+            {
+                Col = c, Row = r, Value = value
+            };
+            _itemsInBoard[_itemsCount++] = currItem;
+            return true;
+        }
 
         /// <summary>
         /// Picks an item in a position, if it exists
@@ -136,7 +136,6 @@ namespace Game
         /// <param name="c">Column</param>
         public int PickItem(int r, int c)
         {
-
         }
 
 
@@ -148,7 +147,6 @@ namespace Game
         /// <param name="col">Column</param>
         public bool IsGoalAt(int row, int col)
         {
-
         }
 
         /// <summary>
@@ -158,8 +156,6 @@ namespace Game
         /// <param name="i">The index in the itemsInBoard array</param>
         public Item GetItem(int i)
         {
-
         }
-
     }
 }
