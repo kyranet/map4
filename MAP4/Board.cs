@@ -1,5 +1,4 @@
 ﻿using System;
-using Listas;
 namespace Game
 {
     public enum Direction {North, East, South, West};
@@ -13,6 +12,7 @@ namespace Game
 
     public class Board
     {
+
         /// <summary>
         /// Matrix of chars that represent the board:
         /// - 0: Empty space
@@ -37,6 +37,8 @@ namespace Game
         /// </summary>
         int numItemsInBoard;
 
+        int countNumsItems = 0;
+
         /// <summary>
         /// Creates a new board. 
         /// </summary>
@@ -46,7 +48,19 @@ namespace Game
         /// <param name="maxItems">Max number of items contained in the board.</param>
         public Board(int r, int c, string textMap, int maxItems)
         {
-            
+            ROWS = r;
+            COLS = c;
+            map = new char[r,c];
+            int aux = 0;
+            for(int i = 0; i<r;i++)
+            {
+                for(int j = 0; j<c;j++)
+                {
+                    map[i, j] = textMap[aux];
+                }
+            }
+            numItemsInBoard = maxItems;
+
         }
 
         /// <summary>
@@ -58,7 +72,8 @@ namespace Game
         /// <param name="c">column</param>
         public bool IsWallAt(int r, int c)
         {
-
+            if (r > ROWS || c > COLS || r < 0 || c < 0) { return false; }
+            else return true;
         }
 
         /// <summary>
@@ -69,7 +84,21 @@ namespace Game
         /// <param name="c">column</param>
         public bool ContainsItem(int r, int c)
         {
+            if (IsWallAt(r,c) ) { return false; }
 
+            int cont = 0;
+            bool end = false;
+            while(!end)
+            {
+                end = itemsInBoard[cont].col == r && itemsInBoard[cont].row == c;
+                if (itemsInBoard[cont].col == r && itemsInBoard[cont].row == c)
+                {
+                    end ) 
+                }
+
+            }
+
+            
         }
 
         /// <summary>
@@ -83,7 +112,16 @@ namespace Game
         /// <param name="value">Item value</param>
         public bool AddItem(int r, int c, int value)
         {
-
+            if ((IsWallAt(r,c)) || (countNumsItems > numItemsInBoard))
+            {
+                Item currItem = new Item();
+                currItem.col = c;
+                currItem.row = r;
+                currItem.value = value;
+                itemsInBoard[countNumsItems] = currItem;
+                return true;
+            }
+            else { return false; }
         }
 
 

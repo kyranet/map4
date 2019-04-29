@@ -1,5 +1,5 @@
 ﻿using System;
-using Listas;
+
 namespace Game
 {
     public class Player
@@ -36,7 +36,7 @@ namespace Game
         /// <param name="dir">Movement direction</param>
         public bool CanMoveInDirection(Board aBoard, Direction dir)
         {
-
+            
         }
 
         /// <summary>
