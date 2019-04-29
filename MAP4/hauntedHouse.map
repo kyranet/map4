@@ -1,0 +1,54 @@
+dungeon 0 BallRoom noExit
+"You are at the ancient BallRoom, where all that people died 
+Note that there is a big clock and a place for the orchestra"
+
+dungeon 1 Kitchen noExit
+"Mmmh... it smells squid fried in butter. You should try to eat something"
+
+dungeon 2 Playroom noExit
+"A large room crowded of old wooden toys.
+ Mother found the corpses right there.
+"
+
+dungeon 3 BlueBedroom noExit
+"The big bed occupies half the room.
+ Father died in this place"
+
+dungeon 4 Outdoors exit
+"Finally you could leave this haunted house!"
+
+dungeon 5 Hall noExit
+"The biggest hall I've ever seen!
+ The marble stairs lead the first floor.
+ There is a big wooden door... maybe it is the exit.
+"
+
+dungeon 6 RedBedroom noExit
+"Why did they call Red Bedroom if it is painted in green?"
+
+dungeon 7 DinningRoom noExit
+"There is a long table with rotten food on it.
+ Nobody cleaned after that day"
+
+dungeon 8 MeetingRoom noExit
+"Already, there is a big blood spot on the carpet"
+
+dungeon 9 Garden exit
+"That small door led you to the garden.
+Finally you can breathe"
+
+door 0 dungeon 0 north dungeon 3
+door 1 dungeon 0 south dungeon 8
+door 2 dungeon 0 east dungeon 5
+door 3 dungeon 0 west dungeon 1
+door 4 dungeon 1 north dungeon 9
+door 5 dungeon 3 west dungeon 2
+door 6 dungeon 5 north dungeon 4
+door 7 dungeon 5 east dungeon 8
+door 8 dungeon 5 south dungeon 7	
+door 9 dungeon 6 south dungeon 7
+
+enemy 0 Ghost 5 1 dungeon 0
+enemy 1 Witch 2 1 dungeon 0
+enemy 2 SmallGhost 3 3 dungeon 2
+
