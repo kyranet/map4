@@ -6,8 +6,8 @@ namespace Game
     {
         private class Node
         {
-            public readonly int Data;
-            public Node NextNode;
+            public int Data { get; }
+            public Node NextNode { get; set; }
 
             public Node(int value, Node next)
             {
