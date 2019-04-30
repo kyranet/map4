@@ -7,8 +7,8 @@ namespace Game
         /// <summary>
         /// Player position
         /// </summary>
-        private int _row, _col;
-
+        public int _row { get; private set; }
+        public int _col { get; private set; }
         /// <summary>
         /// A bag containing the items collected
         /// </summary>

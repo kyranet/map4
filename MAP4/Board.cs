@@ -41,7 +41,7 @@ namespace Game
         /// <summary>
         /// Array with the items contained in this board
         /// </summary>
-        private readonly Item[] _itemsInBoard;
+        private Item[] _itemsInBoard;
 
         private int _itemsCount = 0;
 
@@ -63,10 +63,12 @@ namespace Game
                 for (int j = 0; j < c; j++)
                 {
                     _map[i, j] = textMap[aux];
+                    aux++;
                 }
             }
 
             _itemsInBoard = new Item[maxItems];
+
         }
 
         /// <summary>
@@ -78,7 +80,9 @@ namespace Game
         /// <param name="c">column</param>
         public bool IsWallAt(int r, int c)
         {
-            return r >= 0 && r < _rows && c >= 0 && c < _cols || _map[r, c] == 'w';
+            if (!(r >= 0 && r < _rows && c >= 0 && c < _cols)){ return false; }
+            else if (_map[r, c] == 'w') { return false; }
+            else { return true; }
         }
 
         /// <summary>
@@ -115,12 +119,13 @@ namespace Game
         /// <param name="value">Item value</param>
         public bool AddItem(int r, int c, int value)
         {
-            if (IsWallAt(r, c) || _itemsCount == _itemsInBoard.Length) return false;
+            if (!(IsWallAt(r, c)) || _itemsCount == _itemsInBoard.Length) return false;
 
             var currItem = new Item
             {
                 Col = c, Row = r, Value = value
             };
+            _map[r, c] = 'i';
             _itemsInBoard[_itemsCount++] = currItem;
             return true;
         }
@@ -136,6 +141,25 @@ namespace Game
         /// <param name="c">Column</param>
         public int PickItem(int r, int c)
         {
+            int numReturn = -1;
+            if (ContainsItem(r, c))
+            {
+                int aux = 0;
+                bool found = false;
+                while (!found || aux < _itemsInBoard.Length)
+                {
+                    if (_itemsInBoard[aux].Row == r && _itemsInBoard[aux].Col == c)
+                    {
+                        _map[r, c] = (char)0;
+                        numReturn = aux;
+                        found = true;
+                    }
+                    else { aux++; }
+
+                }
+            }
+            return numReturn;
+
         }
 
 
@@ -147,6 +171,7 @@ namespace Game
         /// <param name="col">Column</param>
         public bool IsGoalAt(int row, int col)
         {
+            return _map[row, col] == 'g';
         }
 
         /// <summary>
@@ -156,6 +181,46 @@ namespace Game
         /// <param name="i">The index in the itemsInBoard array</param>
         public Item GetItem(int i)
         {
+            if (i < _itemsInBoard.Length) { return _itemsInBoard[i]; }
+            else throw new Exception("Item index error.");
+        }
+
+        /// <summary>
+        /// Print map in console
+        /// </summary>
+        public void PrintMap()
+        {
+            Console.Clear();
+            for (int i = 0; i<_rows;i++)
+            {
+                for (int j = 0; j<_cols;j++)
+                {
+                    switch(_map[i,j])
+                    {
+                        case '0':
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            Console.Write("0");
+                            break;
+                        case 'w':
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.Write("w");
+                            break;
+                        case 'i':
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write("i");
+                            break;
+                        case 'g':
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.Write("g");
+                            break;
+                        default:
+                            break;
+                         
+                    }
+                    Console.ResetColor();
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
