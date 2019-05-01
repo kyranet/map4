@@ -66,7 +66,6 @@ namespace Game
                     aux++;
                 }
             }
-
             _itemsInBoard = new Item[maxItems];
 
         }
@@ -93,7 +92,7 @@ namespace Game
         /// <param name="c">column</param>
         public bool ContainsItem(int r, int c)
         {
-            if (IsWallAt(r, c)) return false;
+            if (!IsWallAt(r, c)) return false;
             bool found = false;
             int i = 0;
             while (!found && i < _itemsCount)
@@ -103,6 +102,7 @@ namespace Game
                 {
                     found = true;
                 }
+                else { i++; }
             }
 
             return found;
@@ -146,11 +146,12 @@ namespace Game
             {
                 int aux = 0;
                 bool found = false;
-                while (!found || aux < _itemsInBoard.Length)
+                while (!found && aux < _itemsInBoard.Length)
                 {
                     if (_itemsInBoard[aux].Row == r && _itemsInBoard[aux].Col == c)
                     {
-                        _map[r, c] = (char)0;
+                        _itemsInBoard[aux].Col = -1;
+                        _map[r, c] = '0';
                         numReturn = aux;
                         found = true;
                     }

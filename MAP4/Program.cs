@@ -11,13 +11,15 @@ namespace Game
         static void Main(string[] args)
         {
             Random rnd = new Random();
+
             const int MAXROW = 20, MAXCOL = 20;
             int row = 3, col = 3,maxItems = 3;
             string textMap = "00g0w0000";
 
             //GameStart();
             Board theBoard = new Board(row, col, textMap, maxItems);
-            theBoard.AddItem(2,2,3);
+            theBoard.AddItem(2, 0, 10);
+            theBoard.AddItem(2, 2, 5);
             Player currPlayer = new Player();
             theBoard.PrintMap();
 
@@ -25,11 +27,11 @@ namespace Game
             bool gameOver = false;
             while (!gameOver)
             {
+                PrintPlayerPos();
                 InputController();
                 currPlayer.PickItem(theBoard);
                 theBoard.PrintMap();
                 PrintPlayerInfo();
-                PrintPlayerPos();
                 gameOver = currPlayer.GoalReached(theBoard);
 
             }
@@ -40,7 +42,7 @@ namespace Game
 
             void InputController()
             {
-                Console.SetCursorPosition(21,5);
+                Console.SetCursorPosition(21,0);
                 string key = Console.ReadLine();
                 switch(key)
                 {
@@ -66,6 +68,8 @@ namespace Game
                 Console.SetCursorPosition(0,3+1);
                 Console.WriteLine("Player: "+currPlayer._col+","+currPlayer._row);
                 Console.WriteLine("Your points :"+currPlayer.InventoryValue(theBoard));
+                currPlayer.PrintBag();
+
 
             }
 
@@ -106,6 +110,7 @@ namespace Game
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("*");
                 Console.ResetColor();
+
             }
         }
     }

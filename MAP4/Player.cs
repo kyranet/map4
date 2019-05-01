@@ -125,5 +125,11 @@ namespace Game
         {
             return aBoard.IsGoalAt(_row, _col);
         }
+
+        public void PrintBag()
+        {
+            Console.SetCursorPosition(21,2);
+            Console.WriteLine(_bag.Count);
+        }
     }
 }
