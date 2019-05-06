@@ -56,18 +56,26 @@ namespace Game
         {
             _rows = r;
             _cols = c;
+            _itemsCount = 0;
             _map = new char[r, c];
+            _itemsInBoard = new Item[maxItems];
             var aux = 0;
             for (var i = 0; i < r; i++)
             {
                 for (var j = 0; j < c; j++)
                 {
-                    _map[i, j] = textMap[aux];
+                    var ch = textMap[aux];
+                    _map[i, j] = ch;
+                    if (ch == 'i')
+                    {
+                        _itemsInBoard[_itemsCount].Value = _itemsCount;
+                        _itemsInBoard[_itemsCount].Col = i;
+                        _itemsInBoard[_itemsCount].Row = j;
+                        ++_itemsCount;
+                    }
                     aux++;
                 }
             }
-
-            _itemsInBoard = new Item[maxItems];
         }
 
         /// <summary>
@@ -79,12 +87,7 @@ namespace Game
         /// <param name="c">column</param>
         public bool IsWallAt(int r, int c)
         {
-            if (!(r >= 0 && r < _rows && c >= 0 && c < _cols))
-            {
-                return false;
-            }
-
-            return _map[r, c] != 'w';
+            return r < 0 || r > _rows || c < 0 || c > _cols || _map[r, c] == 'w';
         }
 
         /// <summary>
@@ -95,10 +98,10 @@ namespace Game
         /// <param name="c">column</param>
         public bool ContainsItem(int r, int c)
         {
-            if (!IsWallAt(r, c)) return false;
+            if (IsWallAt(r, c)) return false;
             var found = false;
             var i = 0;
-            while (!found && i < _itemsCount)
+            while (!found && i < _itemsCount && _itemsInBoard[i].Value != -1)
             {
                 var item = _itemsInBoard[i];
                 if (item.Row == r && item.Col == c)
