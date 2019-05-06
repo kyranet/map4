@@ -67,7 +67,7 @@ namespace Game
         /// <param name="dir">Movement direction</param>
         public bool Move(Board aBoard, Direction dir)
         {
-            if (!CanMoveInDirection(aBoard, dir)) return false;
+            if (CanMoveInDirection(aBoard, dir)) return false;
             switch (dir)
             {
                 case Direction.East:

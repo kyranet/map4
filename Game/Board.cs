@@ -65,7 +65,7 @@ namespace Game
                 for (var j = 0; j < c; j++)
                 {
                     var ch = textMap[aux];
-                    _map[i, j] = ch;
+                    _map[j, i] = ch;
                     if (ch == 'i')
                     {
                         _itemsInBoard[_itemsCount].Value = _itemsCount;
@@ -118,7 +118,8 @@ namespace Game
         }
 
         /// <summary>
-        /// Adds an item with a value in a position The position must be inside board bounds and it must be empty.
+        /// Adds an item with a value in a position The position must be inside board bounds and iw
+        /// t must be empty.
         /// The map should be updated with the new edded item.
         /// It throws an exception if the maximum number of items was exceeded.
         /// </summary>
@@ -128,7 +129,7 @@ namespace Game
         /// <param name="value">Item value</param>
         public bool AddItem(int r, int c, int value)
         {
-            if (!IsWallAt(r, c) || _itemsCount == _itemsInBoard.Length) return false;
+            if (IsWallAt(r, c) || _itemsCount == _itemsInBoard.Length || _map[r,c] == 'g') return false;
 
             var currItem = new Item
             {
@@ -192,12 +193,15 @@ namespace Game
         /// <param name="i">The index in the itemsInBoard array</param>
         public Item GetItem(int i)
         {
-            if (i < _itemsInBoard.Length)
+            if (_itemsInBoard[i].Value>0 )
             {
                 return _itemsInBoard[i];
             }
+            else
+            {
+                throw new Exception("Item index error.");
+            }
 
-            throw new Exception("Item index error.");
         }
 
         /// <summary>
