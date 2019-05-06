@@ -7,8 +7,10 @@ namespace Game
         /// <summary>
         /// Player position
         /// </summary>
-        public int _row { get; private set; }
-        public int _col { get; private set; }
+        public int Row { get; private set; }
+
+        public int Col { get; private set; }
+
         /// <summary>
         /// A bag containing the items collected
         /// </summary>
@@ -19,8 +21,8 @@ namespace Game
         /// </summary>
         public Player()
         {
-            _row = 0;
-            _col = 0;
+            Row = 0;
+            Col = 0;
             _bag = new ConnectedList();
         }
 
@@ -33,7 +35,7 @@ namespace Game
         /// <param name="dir">Movement direction</param>
         public bool CanMoveInDirection(Board aBoard, Direction dir)
         {
-            int x = _col, y = _row;
+            int x = Col, y = Row;
             switch (dir)
             {
                 case Direction.East:
@@ -69,16 +71,16 @@ namespace Game
             switch (dir)
             {
                 case Direction.East:
-                    ++_col;
+                    ++Col;
                     break;
                 case Direction.West:
-                    --_col;
+                    --Col;
                     break;
                 case Direction.North:
-                    --_row;
+                    --Row;
                     break;
                 case Direction.South:
-                    ++_row;
+                    ++Row;
                     break;
                 default:
                     throw new NotImplementedException("Unreachable.");
@@ -95,8 +97,8 @@ namespace Game
         /// <param name="aBoard">The board where the player is moving</param>
         public bool PickItem(Board aBoard)
         {
-            if (!aBoard.ContainsItem(_row, _col)) return false;
-            _bag.PushLast(aBoard.PickItem(_row, _col));
+            if (!aBoard.ContainsItem(Row, Col)) return false;
+            _bag.PushLast(aBoard.PickItem(Row, Col));
             return true;
         }
 
@@ -123,7 +125,7 @@ namespace Game
         /// <param name="aBoard">The board where the player is moving.</param>
         public bool GoalReached(Board aBoard)
         {
-            return aBoard.IsGoalAt(_row, _col);
+            return aBoard.IsGoalAt(Row, Col);
         }
     }
 }

@@ -6,46 +6,52 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-
             const int MAXROW = 20, MAXCOL = 20;
-            int row = 3, col = 3,maxItems = 3;
-            string textMap = "00g0w0000";
+            const int row = 3;
+            const int col = 3;
+            const int maxItems = 3;
+            const string textMap = "00g0w0000";
 
-            Board theBoard = new Board(row, col, textMap, maxItems);
+            var theBoard = new Board(row, col, textMap, maxItems);
             theBoard.AddItem(2, 0, 10);
             theBoard.AddItem(2, 2, 5);
-            Player currPlayer = new Player();
+            var currPlayer = new Player();
             theBoard.PrintMap();
 
-
-            bool gameOver = false;
+            var gameOver = false;
             while (!gameOver)
             {
                 PrintPlayerPos();
                 InputController();
-                currPlayer.PickItem(theBoard);
                 theBoard.PrintMap();
+                
+                if (currPlayer.PickItem(theBoard))
+                {
+                    Console.WriteLine("Player picked an item.");
+                }
+                
                 PrintPlayerInfo();
                 gameOver = currPlayer.GoalReached(theBoard);
-
             }
+            
+            Console.WriteLine("Player reached the goal");
 
             Console.ReadKey();
 
 
-            ///Manage the entry of the input
+            // Manage the entry of the input
             void InputController()
             {
-                Console.SetCursorPosition(21,0);
-                string key = Console.ReadLine();
-                switch(key)
+                Console.SetCursorPosition(21, 0);
+                var key = Console.ReadLine();
+                switch (key)
                 {
                     case "a":
-                        currPlayer.Move(theBoard,Direction.West);
+                        currPlayer.Move(theBoard, Direction.West);
                         break;
                     case "s":
                         currPlayer.Move(theBoard, Direction.South);
@@ -56,27 +62,24 @@ namespace Game
                     case "d":
                         currPlayer.Move(theBoard, Direction.East);
                         break;
-                    default:
-                        break;
                 }
             }
 
-            ///Print in console current position of player in board and score
+            // Print in console current position of player in board and score
             void PrintPlayerInfo()
             {
-                Console.SetCursorPosition(0,3+1);
-                Console.WriteLine("Player: "+currPlayer._col+","+currPlayer._row);
-                Console.WriteLine("Your points :"+currPlayer.InventoryValue(theBoard));
+                Console.SetCursorPosition(0, 3 + 1);
+                Console.WriteLine($"Player: {currPlayer.Col.ToString()},{currPlayer.Row.ToString()}");
+                Console.WriteLine($"Your points: {currPlayer.InventoryValue(theBoard).ToString()}");
             }
 
-            ///Print player position in board
+            // Print player position in board
             void PrintPlayerPos()
             {
-                Console.SetCursorPosition(currPlayer._col, currPlayer._row);
+                Console.SetCursorPosition(currPlayer.Col, currPlayer.Row);
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("*");
                 Console.ResetColor();
-
             }
         }
     }

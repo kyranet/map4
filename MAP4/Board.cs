@@ -41,9 +41,9 @@ namespace Game
         /// <summary>
         /// Array with the items contained in this board
         /// </summary>
-        private Item[] _itemsInBoard;
+        private readonly Item[] _itemsInBoard;
 
-        private int _itemsCount = 0;
+        private int _itemsCount;
 
         /// <summary>
         /// Creates a new board. 
@@ -57,17 +57,17 @@ namespace Game
             _rows = r;
             _cols = c;
             _map = new char[r, c];
-            int aux = 0;
-            for (int i = 0; i < r; i++)
+            var aux = 0;
+            for (var i = 0; i < r; i++)
             {
-                for (int j = 0; j < c; j++)
+                for (var j = 0; j < c; j++)
                 {
                     _map[i, j] = textMap[aux];
                     aux++;
                 }
             }
-            _itemsInBoard = new Item[maxItems];
 
+            _itemsInBoard = new Item[maxItems];
         }
 
         /// <summary>
@@ -79,9 +79,12 @@ namespace Game
         /// <param name="c">column</param>
         public bool IsWallAt(int r, int c)
         {
-            if (!(r >= 0 && r < _rows && c >= 0 && c < _cols)){ return false; }
-            else if (_map[r, c] == 'w') { return false; }
-            else { return true; }
+            if (!(r >= 0 && r < _rows && c >= 0 && c < _cols))
+            {
+                return false;
+            }
+
+            return _map[r, c] != 'w';
         }
 
         /// <summary>
@@ -93,8 +96,8 @@ namespace Game
         public bool ContainsItem(int r, int c)
         {
             if (!IsWallAt(r, c)) return false;
-            bool found = false;
-            int i = 0;
+            var found = false;
+            var i = 0;
             while (!found && i < _itemsCount)
             {
                 var item = _itemsInBoard[i];
@@ -102,7 +105,10 @@ namespace Game
                 {
                     found = true;
                 }
-                else { i++; }
+                else
+                {
+                    i++;
+                }
             }
 
             return found;
@@ -119,7 +125,7 @@ namespace Game
         /// <param name="value">Item value</param>
         public bool AddItem(int r, int c, int value)
         {
-            if (!(IsWallAt(r, c)) || _itemsCount == _itemsInBoard.Length) return false;
+            if (!IsWallAt(r, c) || _itemsCount == _itemsInBoard.Length) return false;
 
             var currItem = new Item
             {
@@ -141,26 +147,27 @@ namespace Game
         /// <param name="c">Column</param>
         public int PickItem(int r, int c)
         {
-            int numReturn = -1;
-            if (ContainsItem(r, c))
+            var numReturn = -1;
+            if (!ContainsItem(r, c)) return numReturn;
+            
+            var aux = 0;
+            var found = false;
+            while (!found && aux < _itemsInBoard.Length)
             {
-                int aux = 0;
-                bool found = false;
-                while (!found && aux < _itemsInBoard.Length)
+                if (_itemsInBoard[aux].Row == r && _itemsInBoard[aux].Col == c)
                 {
-                    if (_itemsInBoard[aux].Row == r && _itemsInBoard[aux].Col == c)
-                    {
-                        _itemsInBoard[aux].Col = -1;
-                        _map[r, c] = '0';
-                        numReturn = aux;
-                        found = true;
-                    }
-                    else { aux++; }
-
+                    _itemsInBoard[aux].Col = -1;
+                    _map[r, c] = '0';
+                    numReturn = aux;
+                    found = true;
+                }
+                else
+                {
+                    aux++;
                 }
             }
-            return numReturn;
 
+            return numReturn;
         }
 
 
@@ -182,8 +189,12 @@ namespace Game
         /// <param name="i">The index in the itemsInBoard array</param>
         public Item GetItem(int i)
         {
-            if (i < _itemsInBoard.Length) { return _itemsInBoard[i]; }
-            else throw new Exception("Item index error.");
+            if (i < _itemsInBoard.Length)
+            {
+                return _itemsInBoard[i];
+            }
+
+            throw new Exception("Item index error.");
         }
 
         /// <summary>
@@ -192,11 +203,11 @@ namespace Game
         public void PrintMap()
         {
             Console.Clear();
-            for (int i = 0; i<_rows;i++)
+            for (var i = 0; i < _rows; i++)
             {
-                for (int j = 0; j<_cols;j++)
+                for (var j = 0; j < _cols; j++)
                 {
-                    switch(_map[i,j])
+                    switch (_map[i, j])
                     {
                         case '0':
                             Console.ForegroundColor = ConsoleColor.Gray;
@@ -214,12 +225,11 @@ namespace Game
                             Console.ForegroundColor = ConsoleColor.Blue;
                             Console.Write("g");
                             break;
-                        default:
-                            break;
-                         
                     }
+
                     Console.ResetColor();
                 }
+
                 Console.WriteLine();
             }
         }
