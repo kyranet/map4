@@ -15,7 +15,6 @@ namespace Game
             var theBoard = new Board(row, col, textMap, maxItems);
             theBoard.AddItem(2, 0, 10);
             theBoard.AddItem(2, 2, 5);
-            //theBoard.AddItem(1, 1, 1);
             var currPlayer = new Player();
             theBoard.PrintMap();
 
