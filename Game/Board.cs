@@ -105,10 +105,9 @@ namespace Game
         /// <param name="c">column</param>
         public bool ContainsItem(int c, int r)
         {
-            if (IsWallAt(c, r)) return false;
             var found = false;
             var i = 0;
-            while (!found && i < _itemsCount)
+            while (!found && i < _itemsInBoard.Length)
             {
                 var item = _itemsInBoard[i];
                 if (item.Row == r && item.Col == c)

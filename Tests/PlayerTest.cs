@@ -284,9 +284,7 @@ namespace Tests
                 "OOO",
                 3);
             theBoard.AddItem(0, 0, expected);
-            theBoard.AddItem(1, 0, expected);
-            Assert.IsTrue(theBoard.ContainsItem(0, 0), "There must be an item in (0, 0)");
-            Assert.IsTrue(theBoard.ContainsItem(1, 0), "There must be an item in (0, 1)");
+            theBoard.AddItem(0, 1, expected);
 
             Assert.IsTrue(currPlayer.PickItem(theBoard), "Pick first item");
             Assert.IsTrue(currPlayer.Move(theBoard, Direction.South), "Move to south");
@@ -342,12 +340,60 @@ namespace Tests
         {
             var currPlayer = new Player();
             var theBoard = new Board(3, 3,
-                "gOg" +
+                "gO0" +
                 "OwO" +
                 "OOO",
                 3);
 
             Assert.IsTrue(currPlayer.GoalReached(theBoard));
+        }
+
+        [Test]
+        public void DropItem_Empty()
+        {
+            var currPlayer = new Player();
+            var theBoard = new Board(3, 3,
+                "OOg" +
+                "OwO" +
+                "OOO",
+                3);
+
+            Assert.IsFalse(currPlayer.DropItem(theBoard));
+        }
+
+        [Test]
+        public void DropItem_Available()
+        {
+            var currPlayer = new Player();
+            var theBoard = new Board(3, 3,
+                "iOg" +
+                "OwO" +
+                "OOO",
+                1);
+
+            Assert.IsTrue(currPlayer.PickItem(theBoard));
+            Assert.IsFalse(theBoard.ContainsItem(0, 0));
+            Assert.IsTrue(currPlayer.DropItem(theBoard));
+            Assert.IsTrue(theBoard.ContainsItem(0, 0));
+        }
+
+        [Test]
+        public void DropItem_Unavailable()
+        {
+            var currPlayer = new Player();
+            var theBoard = new Board(3, 3,
+                "OOg" +
+                "OwO" +
+                "OOO",
+                2);
+            theBoard.AddItem(0, 0, 1);
+            theBoard.AddItem(0, 1, 2);
+
+            Assert.IsTrue(currPlayer.PickItem(theBoard), "There is an item");
+            Assert.IsFalse(theBoard.ContainsItem(0, 0), "The item should be picked, therefore removed");
+            Assert.IsTrue(currPlayer.Move(theBoard, Direction.South), "There is no obstacle in the south");
+            Assert.IsTrue(theBoard.ContainsItem(0, 1), "There is an item in this place");
+            Assert.IsFalse(currPlayer.DropItem(theBoard), "It should not be possible to drop an item here, as it is occupied");
         }
     }
 
