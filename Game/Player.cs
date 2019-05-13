@@ -97,15 +97,15 @@ namespace Game
         /// <param name="aBoard">The board where the player is moving</param>
         public bool PickItem(Board aBoard)
         {
-            if (!aBoard.ContainsItem(Row, Col)) return false;
-            _bag.PushLast(aBoard.PickItem(Row, Col));
+            if (!aBoard.ContainsItem(Col, Row)) return false;
+            _bag.PushLast(aBoard.PickItem(Col, Row));
             return true;
         }
 
         public bool DropItem(Board board)
         {
             if (_bag.Count == 0) return false;
-            return board.DropItem(Row, Col, _bag.At(_bag.Count - 1));
+            return board.DropItem(Col, Row, _bag.At(_bag.Count - 1));
         }
 
         /// <summary>
