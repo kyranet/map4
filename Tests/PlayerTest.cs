@@ -9,11 +9,6 @@ namespace Tests
 {
     class PlayerTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         public void CanMoveInDirection_OutOfBounds()
         {

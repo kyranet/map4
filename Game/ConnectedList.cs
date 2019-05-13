@@ -43,6 +43,7 @@ namespace Game
         public void PushFront(int value)
         {
             first = new Node(value, first);
+            ++Count;
         }
 
         public void PushLast(int value)
@@ -63,7 +64,7 @@ namespace Game
 
         public bool RemoveAt(int index)
         {
-            if (index < 0 || index > Count) return false;
+            if (index < 0 || index >= Count) return false;
 
             if (index == 0)
             {

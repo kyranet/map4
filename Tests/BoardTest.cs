@@ -4,13 +4,8 @@ using System;
 
 namespace Tests
 {
-    public class Tests
+    public class BoardTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         public void IsWallAt_OutOfBounds()
         {
