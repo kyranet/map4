@@ -193,7 +193,7 @@ namespace Game
         /// <param name="i">The index in the itemsInBoard array</param>
         public Item GetItem(int i)
         {
-            if (_itemsInBoard[i].Value>0 )
+            if (i < _itemsCount)
             {
                 return _itemsInBoard[i];
             }

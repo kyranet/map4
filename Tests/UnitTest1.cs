@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Game;
+using System;
 
 namespace Tests
 {
@@ -264,6 +265,20 @@ namespace Tests
             Assert.False(isGoal, "Error");
         }
 
+        [Test]
+        public void GetItem_OutOfBounds()
+        {
+            // Arrange
+            var theBoard = new Board(3, 3,
+                "OOg" +
+                "OwO" +
+                "OOO",
+                0);
 
+            Assert.Throws<Exception>(() =>
+            {
+                theBoard.GetItem(0);
+            });
+        }
     }
 }
