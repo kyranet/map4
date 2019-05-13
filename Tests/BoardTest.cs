@@ -275,5 +275,50 @@ namespace Tests
                 theBoard.GetItem(0);
             });
         }
+
+        [Test]
+        public void DropItem_Empty()
+        {
+            // Arrange
+            var theBoard = new Board(3, 3,
+                "OOg" +
+                "OwO" +
+                "OOO",
+                1);
+
+            Assert.IsFalse(theBoard.ContainsItem(0, 0), "The cell should be initially empty");
+            Assert.IsTrue(theBoard.DropItem(0, 0, 1), "As the cell is empty, the item should be dropped");
+            Assert.IsTrue(theBoard.ContainsItem(0, 0), "As the cell is not longer empty, this should be true");
+        }
+
+        [Test]
+        public void DropItem_NotEmptyWall()
+        {
+            // Arrange
+            var theBoard = new Board(3, 3,
+                "iOg" +
+                "OwO" +
+                "OOO",
+                1);
+
+            Assert.IsFalse(theBoard.ContainsItem(1, 1));
+            Assert.IsFalse(theBoard.DropItem(1, 1, 1));
+            Assert.IsFalse(theBoard.ContainsItem(1, 1));
+        }
+
+        [Test]
+        public void DropItem_NotEmptyGoal()
+        {
+            // Arrange
+            var theBoard = new Board(3, 3,
+                "OOg" +
+                "OwO" +
+                "OOO",
+                1);
+
+            Assert.IsFalse(theBoard.ContainsItem(2, 0), "There cannot be an item in the goal");
+            Assert.IsFalse(theBoard.DropItem(2, 0, 1), "It is not possible to drop an item in the goal");
+            Assert.IsFalse(theBoard.ContainsItem(2, 0), "As it is not possible to drop an item here, it should be false");
+        }
     }
 }

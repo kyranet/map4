@@ -69,12 +69,19 @@ namespace Game
                     if (ch == 'i')
                     {
                         _itemsInBoard[_itemsCount].Value = _itemsCount;
-                        _itemsInBoard[_itemsCount].Col = i;
-                        _itemsInBoard[_itemsCount].Row = j;
+                        _itemsInBoard[_itemsCount].Col = j;
+                        _itemsInBoard[_itemsCount].Row = i;
                         ++_itemsCount;
                     }
                     aux++;
                 }
+            }
+
+            for (var i = _itemsCount; i < _itemsInBoard.Length; ++i)
+            {
+                _itemsInBoard[i].Value = -1;
+                _itemsInBoard[i].Col = -1;
+                _itemsInBoard[i].Row = -1;
             }
         }
 
@@ -85,9 +92,9 @@ namespace Game
         /// <returns>True if there  is a wall in position (r,c); false, otherwise</returns>
         /// <param name="r">row</param>
         /// <param name="c">column</param>
-        public bool IsWallAt(int r, int c)
+        public bool IsWallAt(int c, int r)
         {
-            return r < 0 || r > _rows || c < 0 || c > _cols || _map[r, c] == 'w';
+            return r < 0 || r > _rows || c < 0 || c > _cols || _map[c, r] == 'w';
         }
 
         /// <summary>
@@ -96,12 +103,12 @@ namespace Game
         /// <returns><c>true</c> if there  is an item in position (r,c); <c>false</c> otherwise</returns>
         /// <param name="r">row</param>
         /// <param name="c">column</param>
-        public bool ContainsItem(int r, int c)
+        public bool ContainsItem(int c, int r)
         {
-            if (IsWallAt(r, c)) return false;
+            if (IsWallAt(c, r)) return false;
             var found = false;
             var i = 0;
-            while (!found && i < _itemsCount && _itemsInBoard[i].Value != -1)
+            while (!found && i < _itemsCount)
             {
                 var item = _itemsInBoard[i];
                 if (item.Row == r && item.Col == c)
@@ -127,15 +134,15 @@ namespace Game
         /// <param name="r">Row</param>
         /// <param name="c">Column</param>
         /// <param name="value">Item value</param>
-        public bool AddItem(int r, int c, int value)
+        public bool AddItem(int c, int r, int value)
         {
-            if (IsWallAt(r, c) || _itemsCount == _itemsInBoard.Length || _map[r,c] == 'g') return false;
+            if (IsWallAt(c, r) || _itemsCount == _itemsInBoard.Length || _map[c, r] == 'g') return false;
 
             var currItem = new Item
             {
                 Col = c, Row = r, Value = value
             };
-            _map[r, c] = 'i';
+            _map[c, r] = 'i';
             _itemsInBoard[_itemsCount++] = currItem;
             return true;
         }
@@ -149,10 +156,10 @@ namespace Game
         /// </returns>
         /// <param name="r">Row</param>
         /// <param name="c">Column</param>
-        public int PickItem(int r, int c)
+        public int PickItem(int c, int r)
         {
             var numReturn = -1;
-            if (!ContainsItem(r, c)) return numReturn;
+            if (!ContainsItem(c, r)) return numReturn;
             
             var aux = 0;
             var found = false;
@@ -160,7 +167,7 @@ namespace Game
             {
                 if (_itemsInBoard[aux].Row == r && _itemsInBoard[aux].Col == c)
                 {
-                    _itemsInBoard[aux].Col = -1;
+                    _itemsInBoard[aux].Row = -1;
                     _map[r, c] = '0';
                     numReturn = aux;
                     found = true;
@@ -193,7 +200,7 @@ namespace Game
         /// <param name="i">The index in the itemsInBoard array</param>
         public Item GetItem(int i)
         {
-            if (i < _itemsCount)
+            if (i < _itemsCount && _itemsInBoard[i].Value != -1)
             {
                 return _itemsInBoard[i];
             }
@@ -201,7 +208,27 @@ namespace Game
             {
                 throw new Exception("Item index error.");
             }
+        }
 
+        public bool DropItem(int c, int r, int item)
+        {
+            if (ContainsItem(c, r) || IsGoalAt(c, r) || IsWallAt(c, r)) return false;
+            var i = 0;
+            var stop = false;
+            while (!stop && i < _itemsInBoard.Length)
+            {
+                if (_itemsInBoard[i].Row == -1)
+                {
+                    stop = true;
+                    _itemsInBoard[i].Value = item;
+                    _itemsInBoard[i].Col = c;
+                    _itemsInBoard[i].Row = r;
+                    if (i >= _itemsCount) _itemsCount = i + 1;
+                }
+                ++i;
+            }
+
+            return stop;
         }
 
         /// <summary>

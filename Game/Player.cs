@@ -102,6 +102,12 @@ namespace Game
             return true;
         }
 
+        public bool DropItem(Board board)
+        {
+            if (_bag.Count == 0) return false;
+            return board.DropItem(Row, Col, _bag.At(_bag.Count - 1));
+        }
+
         /// <summary>
         /// Returns the total value of the items stored in player's bag
         /// </summary>
