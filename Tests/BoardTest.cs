@@ -20,7 +20,7 @@ namespace Tests
             bool isWall = theBoard.IsWallAt(-1, 0);
 
             // Assert
-            Assert.IsTrue(isWall, "Error");
+            Assert.IsTrue(isWall, "Position outside the map are considered walls");
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace Tests
             bool isWall = theBoard.IsWallAt(1, 1);
 
             // Assert
-            Assert.IsTrue(isWall, "Error");
+            Assert.IsTrue(isWall, "You do not detect a wall when you should detect it.");
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace Tests
             bool isWall = theBoard.IsWallAt(0, 1);
 
             // Assert
-            Assert.IsFalse(isWall, "Error");
+            Assert.IsFalse(isWall, "You have detected a wall when you should not.");
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Tests
             bool hasItem = theBoard.ContainsItem(-1, 0);
 
             // Assert
-            Assert.IsFalse(hasItem, "Error");
+            Assert.IsFalse(hasItem, "You can not place items outside the limits");
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace Tests
             bool hasItem = theBoard.ContainsItem(0, 2);
 
             // Assert
-            Assert.IsTrue(hasItem, "Error");
+            Assert.IsTrue(hasItem, "You have detected a wall when you should not.");
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace Tests
             bool hasItem = theBoard.ContainsItem(0, 0);
 
             // Assert
-            Assert.IsFalse(hasItem, "Error");
+            Assert.IsFalse(hasItem, "You have detected an item in a position where there is no item");
         }
 
         [Test]
@@ -122,7 +122,7 @@ namespace Tests
             bool canAdd = theBoard.AddItem(-1, -1,1);
 
             // Assert
-            Assert.False(canAdd, "Error");
+            Assert.False(canAdd, "You have added an item outside the limits of the map");
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace Tests
             bool canAdd = theBoard.AddItem(1, 0, 1);
 
             // Assert
-            Assert.True(canAdd, "Error");
+            Assert.True(canAdd, "You could not add an item in a position where you could.");
         }
 
         [Test]
@@ -156,7 +156,7 @@ namespace Tests
             bool canAdd = theBoard.AddItem(1, 1, 1);
 
             // Assert
-            Assert.False(canAdd, "Error");
+            Assert.False(canAdd, "You have added an item on a wall");
         }
         [Test]
         public void AddItem_OnGoal()
@@ -172,7 +172,7 @@ namespace Tests
             bool canAdd = theBoard.AddItem(2, 0, 1);
 
             // Assert
-            Assert.False(canAdd, "Error");
+            Assert.False(canAdd, "You have added an item to the position of a goal");
         }
 
         [Test]
@@ -190,7 +190,7 @@ namespace Tests
             bool canPickIt = aux != -1;
 
             // Assert
-            Assert.True(canPickIt, "Error");
+            Assert.True(canPickIt, "You have not been able to pick up an item when you could.");
         }
         [Test]
         public void PickItem_NoExists()
@@ -207,24 +207,8 @@ namespace Tests
             bool canPickIt = aux != -1;
 
             // Assert
-            Assert.False(canPickIt, "Error");
+            Assert.False(canPickIt, "You have taken an item that does not exist on the map.");
         }
-        /*[Test]
-        public void IsGoal_OutOfBounds()
-        {
-            // Arrange
-            var theBoard = new Board(3, 3,
-                "OOg" +
-                "OwO" +
-                "iOO",
-                3);
-
-            // Act
-            var isGoal = theBoard.IsGoalAt(-1, -1);
-
-            // Assert
-            Assert.False(isGoal, "Error");
-        }*/
 
         [Test]
         public void IsGoal_Exists()
@@ -240,7 +224,7 @@ namespace Tests
             var isGoal = theBoard.IsGoalAt(2, 0);
 
             // Assert
-            Assert.True(isGoal, "Error");
+            Assert.True(isGoal, "You have not been able to finish the game by touching a goal.");
         }
 
         [Test]
@@ -257,7 +241,7 @@ namespace Tests
             var isGoal = theBoard.IsGoalAt(2, 2);
 
             // Assert
-            Assert.False(isGoal, "Error");
+            Assert.False(isGoal, "You have finished the game when you have not touched a goal.");
         }
 
         [Test]
@@ -273,7 +257,7 @@ namespace Tests
             Assert.Throws<Exception>(() =>
             {
                 theBoard.GetItem(0);
-            });
+            }, "you have taken an item outside the limits of the map ");
         }
 
         [Test]

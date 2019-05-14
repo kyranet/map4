@@ -24,7 +24,7 @@ namespace Tests
             bool canMove = currPlayer.CanMoveInDirection(theBoard,Direction.North);
 
             // Assert
-            Assert.IsTrue(canMove, "Error");
+            Assert.IsTrue(canMove, "You have moved off the map");
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace Tests
             bool canMove = currPlayer.CanMoveInDirection(theBoard, Direction.West);
 
             // Assert
-            Assert.IsTrue(canMove, "Error");
+            Assert.IsTrue(canMove, "you have moved on a wall");
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace Tests
             bool canMove = currPlayer.CanMoveInDirection(theBoard, Direction.South);
 
             // Assert
-            Assert.IsFalse(canMove, "Error");
+            Assert.IsFalse(canMove, "You can´t move on an item");
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Tests
             bool canMove = currPlayer.CanMoveInDirection(theBoard, Direction.West);
 
             // Assert
-            Assert.IsTrue(canMove, "Error");
+            Assert.IsTrue(canMove, "You can´t make a normal movement");
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace Tests
             bool canMove = currPlayer.Move(theBoard, Direction.North);
 
             // Assert
-            Assert.IsFalse(canMove, "Error");
+            Assert.IsFalse(canMove, "You have been moved out of map");
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace Tests
             bool canMove = currPlayer.Move(theBoard, Direction.West);
 
             // Assert
-            Assert.IsFalse(canMove, "Error");
+            Assert.IsFalse(canMove, "You have moved on a wall");
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace Tests
             bool canMove = currPlayer.Move(theBoard, Direction.West);
 
             // Assert
-            Assert.IsFalse(canMove, "Error");
+            Assert.IsFalse(canMove, "You have moved on a wall");
         }
 
         [Test]
@@ -166,7 +166,7 @@ namespace Tests
             bool canMove = currPlayer.Move(theBoard, Direction.West);
 
             // Assert
-            Assert.IsFalse(canMove, "Error");
+            Assert.IsFalse(canMove, "You can´t move on a item");
         }
 
         [Test]
@@ -184,7 +184,7 @@ namespace Tests
             bool picked = currPlayer.PickItem(theBoard);
 
             // Assert
-            Assert.IsFalse(picked, "Error");
+            Assert.IsFalse(picked, "You have taken an item where there is no one");
         }
 
         [Test]
@@ -202,7 +202,7 @@ namespace Tests
             bool picked = currPlayer.PickItem(theBoard);
 
             // Assert
-            Assert.IsTrue(picked, "Error");
+            Assert.IsTrue(picked, "You can´t pick item in normal conditions");
         }
 
         [Test]
@@ -220,7 +220,7 @@ namespace Tests
             bool picked = currPlayer.PickItem(theBoard);
 
             // Assert
-            Assert.IsFalse(picked, "Error");
+            Assert.IsFalse(picked, "You have taken an item on a wall");
         }
 
         [Test]
@@ -238,7 +238,7 @@ namespace Tests
             bool picked = currPlayer.PickItem(theBoard);
 
             // Assert
-            Assert.IsFalse(picked, "Error");
+            Assert.IsFalse(picked, "You have taken an item on an item");
         }
 
         [Test]
@@ -253,7 +253,7 @@ namespace Tests
 
             var count = currPlayer.InventoryValue(theBoard);
 
-            Assert.AreEqual(count, 0);
+            Assert.AreEqual(count, 0, "The value of your inventory is different from zero when you should not");
         }
 
         [Test]
@@ -270,7 +270,7 @@ namespace Tests
             currPlayer.PickItem(theBoard);
             var count = currPlayer.InventoryValue(theBoard);
 
-            Assert.AreEqual(count, expected);
+            Assert.AreEqual(count, expected, "The value of your inventory is zero when it should be greater than zero");
         }
 
         [Test]
@@ -305,7 +305,7 @@ namespace Tests
                 "OOO",
                 3);
 
-            Assert.IsFalse(currPlayer.GoalReached(theBoard));
+            Assert.IsFalse(currPlayer.GoalReached(theBoard), "You have reached a goal when you should not.");
         }
 
         [Test]
@@ -319,7 +319,7 @@ namespace Tests
                 3);
             theBoard.AddItem(0, 0, 1);
 
-            Assert.IsFalse(currPlayer.GoalReached(theBoard));
+            Assert.IsFalse(currPlayer.GoalReached(theBoard), "You have reached an item in an empty space.");
         }
 
         [Test]
@@ -332,7 +332,7 @@ namespace Tests
                 "OOO",
                 3);
 
-            Assert.IsFalse(currPlayer.GoalReached(theBoard));
+            Assert.IsFalse(currPlayer.GoalReached(theBoard), "You have reached a goal when you were on a wall.");
         }
 
         [Test]
@@ -345,7 +345,7 @@ namespace Tests
                 "OOO",
                 3);
 
-            Assert.IsTrue(currPlayer.GoalReached(theBoard));
+            Assert.IsTrue(currPlayer.GoalReached(theBoard), "You have not reached a goal when you should have reached it.");
         }
 
         [Test]
@@ -358,7 +358,7 @@ namespace Tests
                 "OOO",
                 3);
 
-            Assert.IsFalse(currPlayer.DropItem(theBoard));
+            Assert.IsFalse(currPlayer.DropItem(theBoard),"");
         }
 
         [Test]
