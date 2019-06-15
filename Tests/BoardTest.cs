@@ -1,10 +1,10 @@
 using NUnit.Framework;
-using Game;
 using System;
+using Game;
 
 namespace Tests
 {
-	public class BoardTest
+	internal sealed class BoardTest
 	{
 		[Test]
 		public void IsWallAt_OutOfBounds()
@@ -34,7 +34,7 @@ namespace Tests
 				3);
 
 			// Act
-			bool isWall = theBoard.IsWallAt(1, 1);
+			var isWall = theBoard.IsWallAt(1, 1);
 
 			// Assert
 			Assert.IsTrue(isWall, "You do not detect a wall when you should detect it.");
@@ -51,7 +51,7 @@ namespace Tests
 				3);
 
 			// Act
-			bool isWall = theBoard.IsWallAt(0, 1);
+			var isWall = theBoard.IsWallAt(0, 1);
 
 			// Assert
 			Assert.IsFalse(isWall, "You have detected a wall when you should not.");
@@ -68,7 +68,7 @@ namespace Tests
 				3);
 
 			// Act
-			bool hasItem = theBoard.ContainsItem(-1, 0);
+			var hasItem = theBoard.ContainsItem(-1, 0);
 
 			// Assert
 			Assert.IsFalse(hasItem, "You can not place items outside the limits");
@@ -85,7 +85,7 @@ namespace Tests
 				3);
 
 			// Act
-			bool hasItem = theBoard.ContainsItem(0, 2);
+			var hasItem = theBoard.ContainsItem(0, 2);
 
 			// Assert
 			Assert.IsTrue(hasItem, "You have detected a wall when you should not.");
@@ -102,7 +102,7 @@ namespace Tests
 				3);
 
 			// Act
-			bool hasItem = theBoard.ContainsItem(0, 0);
+			var hasItem = theBoard.ContainsItem(0, 0);
 
 			// Assert
 			Assert.IsFalse(hasItem, "You have detected an item in a position where there is no item");
@@ -119,7 +119,7 @@ namespace Tests
 				3);
 
 			// Act
-			bool canAdd = theBoard.AddItem(-1, -1, 1);
+			var canAdd = theBoard.AddItem(-1, -1, 1);
 
 			// Assert
 			Assert.False(canAdd, "You have added an item outside the limits of the map");
@@ -136,7 +136,7 @@ namespace Tests
 				3);
 
 			// Act
-			bool canAdd = theBoard.AddItem(1, 0, 1);
+			var canAdd = theBoard.AddItem(1, 0, 1);
 
 			// Assert
 			Assert.True(canAdd, "You could not add an item in a position where you could.");
@@ -153,7 +153,7 @@ namespace Tests
 				3);
 
 			// Act
-			bool canAdd = theBoard.AddItem(1, 1, 1);
+			var canAdd = theBoard.AddItem(1, 1, 1);
 
 			// Assert
 			Assert.False(canAdd, "You have added an item on a wall");
@@ -170,7 +170,7 @@ namespace Tests
 				3);
 
 			// Act
-			bool canAdd = theBoard.AddItem(2, 0, 1);
+			var canAdd = theBoard.AddItem(2, 0, 1);
 
 			// Assert
 			Assert.False(canAdd, "You have added an item to the position of a goal");
@@ -188,7 +188,7 @@ namespace Tests
 
 			// Act
 			var aux = theBoard.PickItem(2, 2);
-			bool canPickIt = aux != -1;
+			var canPickIt = aux != -1;
 
 			// Assert
 			Assert.True(canPickIt, "You have not been able to pick up an item when you could.");
@@ -206,7 +206,7 @@ namespace Tests
 
 			// Act
 			var aux = theBoard.PickItem(0, 1);
-			bool canPickIt = aux != -1;
+			var canPickIt = aux != -1;
 
 			// Assert
 			Assert.False(canPickIt, "You have taken an item that does not exist on the map.");

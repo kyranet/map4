@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using NUnit.Framework;
 using Game;
-using NUnit.Framework;
-
 
 namespace Tests
 {
-	class PlayerTest
+	internal sealed class PlayerTest
 	{
 		[Test]
 		public void CanMoveInDirection_OutOfBounds()

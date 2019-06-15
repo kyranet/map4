@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
-using Game;
 using System;
+using Game;
 
 namespace Tests
 {
-	class ConnectedListTest
+	internal sealed class ConnectedListTest
 	{
 		[Test]
 		public void At_Empty()
