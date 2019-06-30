@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Game
 {
@@ -66,7 +66,7 @@ namespace Game
                 {
                     var ch = textMap[aux];
                     _map[r, c] = ch;
-                    if (ch == 'i') AddItem(r, c, _itemsCount);
+                    if (ch == 'i') AddItem(r, c, _itemsCount + 1);
                     ++aux;
                 }
             }
@@ -81,7 +81,7 @@ namespace Game
         /// <param name="row">column</param>
         public bool IsWallAt(int row, int col)
         {
-            return col < 0 || row >= _rows || row < 0 || col >= _cols || _map[row, col] == 'w';
+            return row < 0 || row >= _rows || col < 0 || col >= _cols || _map[row, col] == 'w';
         }
 
         /// <summary>
@@ -92,22 +92,7 @@ namespace Game
         /// <param name="row">column</param>
         public bool ContainsItem(int row, int col)
         {
-            var found = false;
-            var i = 0;
-            while (!found && i < _itemsCount)
-            {
-                var item = _itemsInBoard[i];
-                if (item.Row == row && item.Col == col)
-                {
-                    found = true;
-                }
-                else
-                {
-                    i++;
-                }
-            }
-
-            return found;
+            return row >= 0 && row < _rows && col >= 0 && col < _cols && _map[row, col] == 'i';
         }
 
         /// <summary>
