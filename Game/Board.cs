@@ -48,41 +48,27 @@ namespace Game
 		/// <summary>
 		/// Creates a new board. 
 		/// </summary>
-		/// <param name="r">Number of rows</param>
-		/// <param name="c">Number of columns</param>
+		/// <param name="row">Number of rows</param>
+		/// <param name="col">Number of columns</param>
 		/// <param name="textMap">String of size r*c that represents the map (walls, goals and empty spaces)</param>
 		/// <param name="maxItems">Max number of items contained in the board.</param>
-		public Board(int r, int c, string textMap, int maxItems)
-		{
-			_rows = r;
-			_cols = c;
+		public Board(int row, int col, string textMap, int maxItems)
+        {
+			_rows = row;
+			_cols = col;
 			_itemsCount = 0;
-			_map = new char[r, c];
+			_map = new char[row, col];
 			_itemsInBoard = new Item[maxItems];
 			var aux = 0;
-			for (var i = 0; i < r; i++)
+			for (var r = 0; r < row; r++)
 			{
-				for (var j = 0; j < c; j++)
+				for (var c = 0; c < col; c++)
 				{
 					var ch = textMap[aux];
-					_map[j, i] = ch;
-					if (ch == 'i')
-					{
-						_itemsInBoard[_itemsCount].Value = _itemsCount;
-						_itemsInBoard[_itemsCount].Col = j;
-						_itemsInBoard[_itemsCount].Row = i;
-						++_itemsCount;
-					}
-
+					_map[r, c] = ch;
+					if (ch == 'i') AddItem(r, c, _itemsCount);
 					++aux;
 				}
-			}
-
-			for (var i = _itemsCount; i < _itemsInBoard.Length; ++i)
-			{
-				_itemsInBoard[i].Value = -1;
-				_itemsInBoard[i].Col = -1;
-				_itemsInBoard[i].Row = -1;
 			}
 		}
 
@@ -91,27 +77,27 @@ namespace Game
 		/// result as if a wall was there.
 		/// </summary>
 		/// <returns>True if there  is a wall in position (r,c); false, otherwise</returns>
-		/// <param name="r">row</param>
-		/// <param name="c">column</param>
-		public bool IsWallAt(int c, int r)
+		/// <param name="col">row</param>
+		/// <param name="row">column</param>
+		public bool IsWallAt(int row, int col)
 		{
-			return r < 0 || r > _rows || c < 0 || c > _cols || _map[c, r] == 'w';
+			return col < 0 || row >= _rows || row < 0 || col >= _cols || _map[row, col] == 'w';
 		}
 
 		/// <summary>
 		/// Checks if there is an item in a position. If the position is out of bounds it returns false
 		/// </summary>
 		/// <returns><c>true</c> if there  is an item in position (r,c); <c>false</c> otherwise</returns>
-		/// <param name="r">row</param>
-		/// <param name="c">column</param>
-		public bool ContainsItem(int c, int r)
+		/// <param name="col">row</param>
+		/// <param name="row">column</param>
+		public bool ContainsItem(int row, int col)
 		{
 			var found = false;
 			var i = 0;
-			while (!found && i < _itemsInBoard.Length)
+			while (!found && i < _itemsCount)
 			{
 				var item = _itemsInBoard[i];
-				if (item.Row == r && item.Col == c)
+				if (item.Row == row && item.Col == col)
 				{
 					found = true;
 				}
@@ -131,18 +117,20 @@ namespace Game
 		/// It throws an exception if the maximum number of items was exceeded.
 		/// </summary>
 		/// <returns><c>true</c>, if the item was added; <c>false</c> otherwise.</returns>
-		/// <param name="r">Row</param>
-		/// <param name="c">Column</param>
+		/// <param name="col">Row</param>
+		/// <param name="row">Column</param>
 		/// <param name="value">Item value</param>
-		public bool AddItem(int c, int r, int value)
+		public bool AddItem(int row, int col, int value)
 		{
-			if (IsWallAt(c, r) || _itemsCount == _itemsInBoard.Length || _map[c, r] == 'g') return false;
+			if (_itemsCount == _itemsInBoard.Length || _map[row, col] != 'O') return false;
 
 			var currItem = new Item
 			{
-				Col = c, Row = r, Value = value
+				Col = row, 
+				Row = col, 
+				Value = value
 			};
-			_map[c, r] = 'i';
+			_map[row, col] = 'i';
 			_itemsInBoard[_itemsCount++] = currItem;
 			return true;
 		}
@@ -154,21 +142,21 @@ namespace Game
 		/// The position of the item in the itemsInBoard array, 
 		/// or -1 if there is not any item in that position
 		/// </returns>
-		/// <param name="r">Row</param>
-		/// <param name="c">Column</param>
-		public int PickItem(int c, int r)
+		/// <param name="row">Row</param>
+		/// <param name="col">Column</param>
+		public int PickItem(int row, int col)
 		{
 			var numReturn = -1;
-			if (!ContainsItem(c, r)) return numReturn;
+			if (!ContainsItem(row, col)) return numReturn;
 
 			var aux = 0;
 			var found = false;
 			while (!found && aux < _itemsInBoard.Length)
 			{
-				if (_itemsInBoard[aux].Row == r && _itemsInBoard[aux].Col == c)
+				if (_itemsInBoard[aux].Row == row && _itemsInBoard[aux].Col == col)
 				{
 					_itemsInBoard[aux].Row = -1;
-					_map[r, c] = '0';
+					_map[row, col] = '0';
 					numReturn = aux;
 					found = true;
 				}
@@ -209,9 +197,9 @@ namespace Game
 			throw new Exception("Item index error.");
 		}
 
-		public bool DropItem(int c, int r, int item)
+		public bool DropItem(int row, int col, int item)
 		{
-			if (ContainsItem(c, r) || IsGoalAt(c, r) || IsWallAt(c, r)) return false;
+			if (ContainsItem(row, col) || IsGoalAt(row, col) || IsWallAt(row, col)) return false;
 			var i = 0;
 			var stop = false;
 			while (!stop && i < _itemsInBoard.Length)
@@ -220,8 +208,8 @@ namespace Game
 				{
 					stop = true;
 					_itemsInBoard[i].Value = item;
-					_itemsInBoard[i].Col = c;
-					_itemsInBoard[i].Row = r;
+					_itemsInBoard[i].Col = col;
+					_itemsInBoard[i].Row = row;
 					if (i >= _itemsCount) _itemsCount = i + 1;
 				}
 

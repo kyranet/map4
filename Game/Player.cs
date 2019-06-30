@@ -7,9 +7,9 @@ namespace Game
 		/// <summary>
 		/// Player position
 		/// </summary>
-		public int Row { get; private set; }
+		public int Row { get; set; }
 
-		public int Col { get; private set; }
+		public int Col { get; set; }
 
 		/// <summary>
 		/// A bag containing the items collected
@@ -54,7 +54,7 @@ namespace Game
 					throw new NotImplementedException("Unreachable.");
 			}
 
-			return aBoard.IsWallAt(x, y);
+			return !aBoard.IsWallAt(x, y);
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace Game
 		/// <param name="dir">Movement direction</param>
 		public bool Move(Board aBoard, Direction dir)
 		{
-			if (CanMoveInDirection(aBoard, dir)) return false;
+			if (!CanMoveInDirection(aBoard, dir)) return false;
 			switch (dir)
 			{
 				case Direction.East:
@@ -97,14 +97,14 @@ namespace Game
 		/// <param name="aBoard">The board where the player is moving</param>
 		public bool PickItem(Board aBoard)
 		{
-			if (!aBoard.ContainsItem(Col, Row)) return false;
-			_bag.PushLast(aBoard.PickItem(Col, Row));
+			if (!aBoard.ContainsItem(Row, Col)) return false;
+			_bag.PushLast(aBoard.PickItem(Row, Col));
 			return true;
 		}
 
 		public bool DropItem(Board board)
 		{
-			return _bag.Count != 0 && board.DropItem(Col, Row, _bag.At(_bag.Count - 1));
+			return _bag.Count != 0 && board.DropItem(Row, Col, _bag.At(_bag.Count - 1));
 		}
 
 		/// <summary>

@@ -5,393 +5,246 @@ namespace Tests
 {
 	internal sealed class PlayerTest
 	{
+		private Board Board { get; set; }
+		private Player Player { get; set; }
+		
+		[SetUp]
+		public void Start()
+		{
+			// Initialize map as
+			// iOg
+			// iwO
+			// OOO
+			Board = new Board(3, 3, "OOg" + "OwO" + "OOO", 3);
+			Board.AddItem(0, 0, 2);
+			Board.AddItem(0, 1, 4);
+            Player = new Player
+            {
+                Row = 0,
+                Col = 1
+            };
+        }
+
 		[Test]
 		public void CanMoveInDirection_OutOfBounds()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"Owg" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var canMove = currPlayer.CanMoveInDirection(theBoard, Direction.North);
-
-			// Assert
-			Assert.IsTrue(canMove, "You have moved off the map");
+			var canMove = Player.CanMoveInDirection(Board, Direction.North);
+			Assert.IsFalse(canMove, "You cannot move outside the map.");
 		}
 
 		[Test]
 		public void CanMoveInDirection_OnWall()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"Owg" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var canMove = currPlayer.CanMoveInDirection(theBoard, Direction.West);
-
-			// Assert
-			Assert.IsTrue(canMove, "you have moved on a wall");
+			var canMove = Player.CanMoveInDirection(Board, Direction.South);
+			Assert.IsFalse(canMove, "You cannot move to a cell occupied by a wall.");
 		}
 
 		[Test]
 		public void CanMoveInDirection_OnItem()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"Owg" +
-				"iwO" +
-				"OOO",
-				3);
-
-			// Act
-			var canMove = currPlayer.CanMoveInDirection(theBoard, Direction.South);
-
-			// Assert
-			Assert.IsFalse(canMove, "You can´t move on an item");
+			var canMove = Player.CanMoveInDirection(Board, Direction.West);
+			Assert.IsTrue(canMove, "You can move to a cell occupied by an item.");
 		}
 
 		[Test]
 		public void CanMoveInDirection_OnGoal()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"OgO" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var canMove = currPlayer.CanMoveInDirection(theBoard, Direction.West);
-
-			// Assert
-			Assert.IsTrue(canMove, "You can´t make a normal movement");
+			var canMove = Player.CanMoveInDirection(Board, Direction.East);
+			Assert.IsTrue(canMove, "You can move to a cell occupied by a goal.");
+		}
+		
+		[Test]
+		public void CanMoveInDirection_OnEmpty()
+		{
+			// Move the player so it can move towards empty cells
+			Player.Row = 2;
+			Player.Col = 1;
+			
+			var canMove = Player.CanMoveInDirection(Board, Direction.West);
+			Assert.IsTrue(canMove, "You can move to an empty cell.");
 		}
 
 		[Test]
 		public void Move_OutOfBounds()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"OOg" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var canMove = currPlayer.Move(theBoard, Direction.North);
-
-			// Assert
-			Assert.IsFalse(canMove, "You have been moved out of map");
+			var canMove = Player.Move(Board, Direction.North);
+			Assert.IsFalse(canMove, "You cannot move outside the map.");
 		}
 
 		[Test]
 		public void Move_OnWall()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"Owg" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var canMove = currPlayer.Move(theBoard, Direction.West);
-
-			// Assert
-			Assert.IsFalse(canMove, "You have moved on a wall");
+			var canMove = Player.Move(Board, Direction.South);
+			Assert.IsFalse(canMove, "You cannot move to a cell occupied by a wall.");
+		}
+		
+		[Test]
+		public void Move_OnItem()
+		{
+			var canMove = Player.Move(Board, Direction.West);
+			Assert.IsTrue(canMove, "You can move to a cell occupied by an item.");
+			Assert.AreEqual(Player.Row, 0, "The item is at position (0, 0).");
+			Assert.AreEqual(Player.Col, 0, "The item is at position (0, 0).");
 		}
 
 		[Test]
 		public void Move_OnGoal()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"OgO" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var canMove = currPlayer.Move(theBoard, Direction.West);
-
-			// Assert
-			Assert.IsFalse(canMove, "You have moved on a wall");
+			var canMove = Player.Move(Board, Direction.East);
+			Assert.IsTrue(canMove, "You can move to a cell occupied by a goal.");
+			Assert.AreEqual(Player.Row, 0, "The item is at position (0, 2).");
+			Assert.AreEqual(Player.Col, 2, "The item is at position (0, 2).");
 		}
 
 		[Test]
-		public void Move_CanMove()
+		public void Move_OnEmpty()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"OgO" +
-				"OwO" +
-				"OOO",
-				3);
-
-			Assert.IsTrue(currPlayer.Move(theBoard, Direction.South), "Should be able to move South");
-			Assert.AreEqual(currPlayer.Row, 1, "Should not change its Row");
-			Assert.AreEqual(currPlayer.Col, 0, "Should change its Col to 1");
+			// Move the player so it can move towards empty cells
+			Player.Row = 2;
+			Player.Col = 1;
+			
+			var canMove = Player.Move(Board, Direction.West);
+			Assert.IsTrue(canMove, "You can move to an empty cell.");
+			Assert.AreEqual(Player.Row, 2, "(2, 1) + Direction.West = (2, 0)");
+			Assert.AreEqual(Player.Col, 0, "(2, 1) + Direction.West = (2, 0)");
 		}
 
 		[Test]
-		public void Move_OnItem()
+		public void Move_PickItemOnEmpty()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"Oig" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var canMove = currPlayer.Move(theBoard, Direction.West);
-
-			// Assert
-			Assert.IsFalse(canMove, "You can´t move on a item");
+			var picked = Player.PickItem(Board);
+			Assert.IsFalse(picked, "You cannot take an item from an empty cell.");
 		}
 
 		[Test]
-		public void Move_PickItemEmpty()
+		public void Move_PickItemOnGoal()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"Oig" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var picked = currPlayer.PickItem(theBoard);
-
-			// Assert
-			Assert.IsFalse(picked, "You have taken an item where there is no one");
+			// Move the player to the position of a goal cell
+			Assert.IsTrue(Player.Move(Board, Direction.East));
+			
+			var picked = Player.PickItem(Board);
+			Assert.IsFalse(picked, "You cannot take an item from a goal cell.");
 		}
-
+		
 		[Test]
-		public void Move_PickItemNotEmpty()
+		public void Move_PickItemOnItem()
 		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"iOg" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var picked = currPlayer.PickItem(theBoard);
-
-			// Assert
-			Assert.IsTrue(picked, "You can´t pick item in normal conditions");
-		}
-
-		[Test]
-		public void Move_PickItemWall()
-		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"wig" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var picked = currPlayer.PickItem(theBoard);
-
-			// Assert
-			Assert.IsFalse(picked, "You have taken an item on a wall");
-		}
-
-		[Test]
-		public void Move_PickItemGoal()
-		{
-			// Arrange
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"giw" +
-				"OwO" +
-				"OOO",
-				3);
-
-			// Act
-			var picked = currPlayer.PickItem(theBoard);
-
-			// Assert
-			Assert.IsFalse(picked, "You have taken an item on an item");
+			// Move the player to the position of an item cell
+			Assert.IsTrue(Player.Move(Board, Direction.West));
+			Assert.IsTrue(Board.ContainsItem(0, 0));
+			
+			var picked = Player.PickItem(Board);
+			Assert.IsTrue(picked, "You can take an item from an item cell.");
+			
+			// Drop the item to reset the state, and reset the Player's position.
+			// NOTE: If this does not produce the correct behaviour, other tests will catch it.
+			Assert.IsTrue(Player.DropItem(Board));
+			Assert.IsTrue(Player.Move(Board, Direction.East));
 		}
 
 		[Test]
 		public void InventoryValue_Empty()
 		{
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"iOg" +
-				"OwO" +
-				"OOO",
-				3);
-
-			var count = currPlayer.InventoryValue(theBoard);
-
-			Assert.AreEqual(count, 0, "The value of your inventory is different from zero when you should not");
+			var count = Player.InventoryValue(Board);
+			Assert.AreEqual(count, 0, "The bag is empty, therefore the inventory value must be 0.");
 		}
 
 		[Test]
 		public void InventoryValue_NotEmpty()
 		{
-			const int expected = 5;
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"OOg" +
-				"OwO" +
-				"OOO",
-				3);
-			theBoard.AddItem(0, 0, expected);
-			currPlayer.PickItem(theBoard);
-			var count = currPlayer.InventoryValue(theBoard);
+			// Move the player to the position of an item cell
+			Assert.IsTrue(Player.Move(Board, Direction.West));
+			Assert.IsTrue(Player.PickItem(Board));
+			
+			var count = Player.InventoryValue(Board);
 
-			Assert.AreEqual(count, expected, "The value of your inventory is zero when it should be greater than zero");
+			Assert.AreEqual(count, 2, "The value of the item picked (at (0, 0)) is 2, therefore this should be 2.");
+
+			// Drop the item to reset the state, and reset the Player's position.
+			Assert.IsTrue(Player.DropItem(Board));
+			Assert.IsTrue(Player.Move(Board, Direction.East));
 		}
 
 		[Test]
 		public void InventoryValue_NotEmptyAccumulative()
 		{
-			const int expected = 5;
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"OOg" +
-				"OwO" +
-				"OOO",
-				3);
-			theBoard.AddItem(0, 0, expected);
-			theBoard.AddItem(0, 1, expected);
+			// (1, 0) -> (0, 0)
+			Assert.IsTrue(Player.Move(Board, Direction.West));
+			Assert.IsTrue(Player.PickItem(Board));
+			Assert.AreEqual(Player.InventoryValue(Board), 2, "The value of the item picked (at (0, 0)) is 2, therefore this should be 2.");
+			
+			// (0, 0) -> (0, 1)
+			Assert.IsTrue(Player.Move(Board, Direction.South));
+			Assert.IsTrue(Player.PickItem(Board));
+			Assert.AreEqual(Player.InventoryValue(Board), 6, "The value of the item picked (at (0, 1)) is 4, therefore this should be 4 + 2.");
 
-			Assert.IsTrue(currPlayer.PickItem(theBoard), "Pick first item");
-			Assert.IsTrue(currPlayer.Move(theBoard, Direction.South), "Move to south");
-			Assert.IsTrue(currPlayer.PickItem(theBoard), "Pick second item");
-
-			var count = currPlayer.InventoryValue(theBoard);
-
-			Assert.AreEqual(count, expected + expected);
+			// Drop the items to reset the state, and reset the Player's position.
+			Assert.IsTrue(Player.DropItem(Board));
+			Assert.IsTrue(Player.Move(Board, Direction.North));
+			Assert.IsTrue(Player.DropItem(Board));
+			Assert.IsTrue(Player.Move(Board, Direction.East));
 		}
 
 		[Test]
-		public void GoalReached_False()
+		public void GoalReached_OnEmpty()
 		{
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"OOg" +
-				"OwO" +
-				"OOO",
-				3);
-
-			Assert.IsFalse(currPlayer.GoalReached(theBoard), "You have reached a goal when you should not.");
+			// The player is in the position (1, 0), which is an empty cell.
+			var reached = Player.GoalReached(Board);
+			Assert.IsFalse(reached, "The player is not in a goal cell.");
 		}
 
 		[Test]
-		public void GoalReached_FalseItem()
+		public void GoalReached_OnItem()
 		{
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"OOg" +
-				"OwO" +
-				"OOO",
-				3);
-			theBoard.AddItem(0, 0, 1);
+			// Move the player to the position of an item cell
+			Assert.IsTrue(Player.Move(Board, Direction.West));
 
-			Assert.IsFalse(currPlayer.GoalReached(theBoard), "You have reached an item in an empty space.");
+			var reached = Player.GoalReached(Board);
+			Assert.IsFalse(reached, "The player is in an item cell, but not in a goal cell.");
 		}
 
 		[Test]
-		public void GoalReached_FalseWall()
+		public void GoalReached_OnGoal()
 		{
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"wOg" +
-				"OwO" +
-				"OOO",
-				3);
-
-			Assert.IsFalse(currPlayer.GoalReached(theBoard), "You have reached a goal when you were on a wall.");
-		}
-
-		[Test]
-		public void GoalReached_True()
-		{
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"gO0" +
-				"OwO" +
-				"OOO",
-				3);
-
-			Assert.IsTrue(currPlayer.GoalReached(theBoard),
-				"You have not reached a goal when you should have reached it.");
+			// Move the player to the position of a goal cell
+			Assert.IsTrue(Player.Move(Board, Direction.East));
+			
+			var reached = Player.GoalReached(Board);
+			Assert.IsTrue(reached, "The player is in a goal cell, therefore this should be true.");
 		}
 
 		[Test]
 		public void DropItem_Empty()
 		{
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"OOg" +
-				"OwO" +
-				"OOO",
-				3);
-
-			Assert.IsFalse(currPlayer.DropItem(theBoard), "");
+			var dropped = Player.DropItem(Board);
+			Assert.IsFalse(dropped, "The player does not have an item to drop.");
 		}
 
 		[Test]
 		public void DropItem_Available()
 		{
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"iOg" +
-				"OwO" +
-				"OOO",
-				1);
+			Assert.IsTrue(Player.Move(Board, Direction.West));
+			Assert.IsTrue(Player.PickItem(Board));
+			Assert.IsFalse(Board.ContainsItem(0, 0));
 
-			Assert.IsTrue(currPlayer.PickItem(theBoard));
-			Assert.IsFalse(theBoard.ContainsItem(0, 0));
-			Assert.IsTrue(currPlayer.DropItem(theBoard));
-			Assert.IsTrue(theBoard.ContainsItem(0, 0));
+			var dropped = Player.DropItem(Board);
+			Assert.IsTrue(dropped, "The player had an item and successfully dropped it in an empty cell.");
 		}
 
 		[Test]
 		public void DropItem_Unavailable()
 		{
-			var currPlayer = new Player();
-			var theBoard = new Board(3, 3,
-				"OOg" +
-				"OwO" +
-				"OOO",
-				2);
-			theBoard.AddItem(0, 0, 1);
-			theBoard.AddItem(0, 1, 2);
-
-			Assert.IsTrue(currPlayer.PickItem(theBoard), "There is an item");
-			Assert.IsFalse(theBoard.ContainsItem(0, 0), "The item should be picked, therefore removed");
-			Assert.IsTrue(currPlayer.Move(theBoard, Direction.South), "There is no obstacle in the south");
-			Assert.IsTrue(theBoard.ContainsItem(0, 1), "There is an item in this place");
-			Assert.IsFalse(currPlayer.DropItem(theBoard),
-				"It should not be possible to drop an item here, as it is occupied");
+			Assert.IsTrue(Player.Move(Board, Direction.West));
+			Assert.IsTrue(Player.PickItem(Board));
+			Assert.IsFalse(Board.ContainsItem(0, 0));
+			Assert.IsTrue(Player.Move(Board, Direction.South));
+			Assert.IsTrue(Board.ContainsItem(1, 0));
+			
+			var dropped = Player.DropItem(Board);
+			Assert.IsFalse(dropped, "The player had an item but it cannot drop it in an occupied cell.");
+			
+			Assert.IsTrue(Player.Move(Board, Direction.North));
+			Assert.IsTrue(Player.DropItem(Board));
 		}
 	}
 }
