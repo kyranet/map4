@@ -2,6 +2,7 @@
 
 namespace Game
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal static class Program
     {
         private static int MaxRows { get; } = 3;

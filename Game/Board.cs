@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Game
 {
@@ -203,6 +203,7 @@ namespace Game
         /// <summary>
         /// Print map in console
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public void PrintMap()
         {
             Console.Clear();

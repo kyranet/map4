@@ -3,6 +3,7 @@ using Game;
 
 namespace Tests
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal sealed class PlayerTest
     {
         private Board Board { get; set; }

@@ -4,6 +4,7 @@ using Game;
 
 namespace Tests
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal sealed class BoardTest
     {
         private Board Board { get; set; }
