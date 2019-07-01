@@ -15,20 +15,20 @@ namespace Tests
         }
 
         [Test]
-        public void At_Empty()
+        public void NEsimo_Empty()
         {
             Assert.Throws<Exception>(() => { Lista.NEsimo(0); });
         }
 
         [Test]
-        public void PushLast_Empty()
+        public void InsertaFin_Empty()
         {
             Lista.InsertaFin(1);
             Assert.AreEqual(1, Lista.CuentaEltos());
         }
 
         [Test]
-        public void PushLast_NotEmpty()
+        public void InsertaFin_NotEmpty()
         {
             Lista.InsertaFin(1);
             Lista.InsertaFin(2);
@@ -36,7 +36,7 @@ namespace Tests
         }
 
         [Test]
-        public void At_NotEmpty()
+        public void NEsimo_NotEmpty()
         {
             const int expected = 2;
             Lista.InsertaFin(expected);
@@ -44,7 +44,7 @@ namespace Tests
         }
 
         [Test]
-        public void At_MultipleLast()
+        public void NEsimo_MultipleLast()
         {
             Lista.InsertaFin(10);
             Lista.InsertaFin(20);
@@ -54,19 +54,13 @@ namespace Tests
         }
 
         [Test]
-        public void RemoveAt_Empty()
+        public void BorraElto_Empty()
         {
             Assert.IsFalse(Lista.BorraElto(0));
         }
 
         [Test]
-        public void RemoveAt_Negative()
-        {
-            Assert.IsFalse(Lista.BorraElto(-1));
-        }
-
-        [Test]
-        public void RemoveAt_First()
+        public void BorraElto_First()
         {
             Lista.InsertaFin(1);
             Lista.InsertaFin(2);
@@ -80,7 +74,7 @@ namespace Tests
         }
 
         [Test]
-        public void RemoveAt_Middle()
+        public void BorraElto_Middle()
         {
             Lista.InsertaFin(1);
             Lista.InsertaFin(2);
@@ -94,7 +88,7 @@ namespace Tests
         }
 
         [Test]
-        public void RemoveAt_Last()
+        public void BorraElto_Last()
         {
             Lista.InsertaFin(1);
             Lista.InsertaFin(2);
@@ -108,7 +102,7 @@ namespace Tests
         }
 
         [Test]
-        public void RemoveAt_OutOfBounds()
+        public void BorraElto_OutOfBounds()
         {
             Lista.InsertaFin(1);
             Lista.InsertaFin(2);
