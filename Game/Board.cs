@@ -29,17 +29,17 @@ namespace Game
         private readonly char[,] _map;
 
         /// <summary>
-        /// Number of rows of the map
+        /// Number of rows of the map.
         /// </summary>
         private readonly int _rows;
 
         /// <summary>
-        /// Number of cols of the map
+        /// Number of cols of the map.
         /// </summary>
         private readonly int _cols;
 
         /// <summary>
-        /// Array with the items contained in this board
+        /// Array with the items contained in this board.
         /// </summary>
         private readonly Item[] _itemsInBoard;
 
@@ -48,9 +48,9 @@ namespace Game
         /// <summary>
         /// Creates a new board. 
         /// </summary>
-        /// <param name="row">Number of rows</param>
-        /// <param name="col">Number of columns</param>
-        /// <param name="textMap">String of size r*c that represents the map (walls, goals and empty spaces)</param>
+        /// <param name="row">Number of rows.</param>
+        /// <param name="col">Number of columns.</param>
+        /// <param name="textMap">String of size (r * c) that represents the map (walls, goals and empty spaces).</param>
         /// <param name="maxItems">Max number of items contained in the board.</param>
         public Board(int row, int col, string textMap, int maxItems)
         {
@@ -66,7 +66,6 @@ namespace Game
                 {
                     var ch = textMap[aux];
                     _map[r, c] = ch;
-                    if (ch == 'i') AddItem(r, c, _itemsCount + 1);
                     ++aux;
                 }
             }
@@ -76,9 +75,9 @@ namespace Game
         /// Checks if there is a wall in a position. If the position is out of bounds it returns the same 
         /// result as if a wall was there.
         /// </summary>
-        /// <returns>True if there  is a wall in position (r,c); false, otherwise</returns>
-        /// <param name="col">row</param>
-        /// <param name="row">column</param>
+        /// <param name="row">The row to check the wall at.</param>
+        /// <param name="col">The column to check the wall at.</param>
+        /// <returns><c>true</c>, if the position contains a wall, <c>false</c> otherwise.</returns>
         public bool IsWallAt(int row, int col)
         {
             return row < 0 || row >= _rows || col < 0 || col >= _cols || _map[row, col] == 'w';
@@ -87,9 +86,9 @@ namespace Game
         /// <summary>
         /// Checks if there is an item in a position. If the position is out of bounds it returns false
         /// </summary>
-        /// <returns><c>true</c> if there  is an item in position (r,c); <c>false</c> otherwise</returns>
-        /// <param name="col">row</param>
-        /// <param name="row">column</param>
+        /// <param name="row">The row to check the item at.</param>
+        /// <param name="col">The column to check the item at.</param>
+        /// <returns><c>true</c>, if the position contains an item, <c>false</c> otherwise.</returns>
         public bool ContainsItem(int row, int col)
         {
             return row >= 0 && row < _rows && col >= 0 && col < _cols && _map[row, col] == 'i';
@@ -101,10 +100,10 @@ namespace Game
         /// The map should be updated with the new edded item.
         /// It throws an exception if the maximum number of items was exceeded.
         /// </summary>
-        /// <returns><c>true</c>, if the item was added; <c>false</c> otherwise.</returns>
-        /// <param name="col">Row</param>
-        /// <param name="row">Column</param>
-        /// <param name="value">Item value</param>
+        /// <param name="row">The row to put the item at.</param>
+        /// <param name="col">The column to put the item at.</param>
+        /// <param name="value">The value for the item.</param>
+        /// <returns><c>true</c>, if the item was successfully added, <c>false</c> otherwise.</returns>
         public bool AddItem(int row, int col, int value)
         {
             if (row < 0 || row >= _rows || col < 0 || col >= _cols) return false;
@@ -124,12 +123,12 @@ namespace Game
         /// <summary>
         /// Picks an item in a position, if it exists
         /// </summary>
+        /// <param name="row">The row to check the item at.</param>
+        /// <param name="col">The column to check the item at.</param>
         /// <returns>
-        /// The position of the item in the itemsInBoard array, 
-        /// or -1 if there is not any item in that position
+        /// The position of the item in the <c>_itemsInBoard</c> array, 
+        /// or -1 if there is not any item in that position.
         /// </returns>
-        /// <param name="row">Row</param>
-        /// <param name="col">Column</param>
         public int PickItem(int row, int col)
         {
             var numReturn = -1;
@@ -158,9 +157,9 @@ namespace Game
         /// <summary>
         /// Checks if a position is a goal
         /// </summary>
-        /// <returns><c>true</c> if the position is a goal, <c>false</c> otherwise</returns>
-        /// <param name="row">Row</param>
-        /// <param name="col">Column</param>
+        /// <param name="row">The row to check the goal at.</param>
+        /// <param name="col">The column to check the goal at.</param>
+        /// <returns><c>true</c>, if the position contains a goal, <c>false</c> otherwise.</returns>
         public bool IsGoalAt(int row, int col)
         {
             return row >= 0 && row < _rows && col >= 0 && col < _cols && _map[row, col] == 'g';
@@ -169,12 +168,12 @@ namespace Game
         /// <summary>
         /// Gets the i-th item in the itemsInBoard array. It throws an exception if the item does not exist.
         /// </summary>
-        /// <exception cref="Exception"></exception>
+        /// <param name="i">The index in the <c>_itemsInBoard</c> array.</param>
         /// <returns>The item</returns>
-        /// <param name="i">The index in the itemsInBoard array</param>
+        /// <exception cref="Exception">When the index is either negaative or equals or greater than <c>_itemsCount</c>.</exception>
         public Item GetItem(int i)
         {
-            if (i < _itemsCount)
+            if (i >= 0 && i < _itemsCount)
             {
                 return _itemsInBoard[i];
             }
@@ -182,6 +181,11 @@ namespace Game
             throw new Exception("Item index error.");
         }
 
+        /// <summary>
+        /// Drops an item to the board.
+        /// </summary>
+        /// <param name="item">The Item instance to be dropped into the board.</param>
+        /// <returns><c>true</c> if it was successfully dropped into the board, <c>false</c> otherwise.</returns>
         public bool DropItem(Item item)
         {
             var existent = _map[item.Row, item.Col];
