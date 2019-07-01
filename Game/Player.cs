@@ -14,7 +14,7 @@ namespace Game
         /// <summary>
         /// A bag containing the items collected
         /// </summary>
-        private readonly ConnectedList _bag;
+        private readonly Lista _bag;
 
         /// <summary>
         /// The player starts at 0,0 and with an empty bag
@@ -23,7 +23,7 @@ namespace Game
         {
             Row = 0;
             Col = 0;
-            _bag = new ConnectedList();
+            _bag = new Lista();
         }
 
         /// <summary>
@@ -98,23 +98,23 @@ namespace Game
         public bool PickItem(Board aBoard)
         {
             if (!aBoard.ContainsItem(Row, Col)) return false;
-            _bag.PushLast(aBoard.PickItem(Row, Col));
+            _bag.InsertaFin(aBoard.PickItem(Row, Col));
             return true;
         }
 
         public bool DropItem(Board board)
         {
-            if (_bag.Count == 0) return false;
+            if (_bag.CuentaEltos() == 0) return false;
 
             var i = 0;
             var found = false;
-            while (!found && i < _bag.Count)
+            while (!found && i < _bag.CuentaEltos())
             {
-                var item = board.GetItem(_bag.At(i));
+                var item = board.GetItem(_bag.NEsimo(i));
                 if (item.Col == Col && item.Row == Row && board.DropItem(item))
                 {
                     found = true;
-                    _bag.RemoveAt(i);
+                    _bag.BorraElto(i);
                 }
                 else
                 {
@@ -133,9 +133,9 @@ namespace Game
         public int InventoryValue(Board aBoard)
         {
             var total = 0;
-            for (var i = 0; i < _bag.Count; i++)
+            for (var i = 0; i < _bag.CuentaEltos(); i++)
             {
-                total += aBoard.GetItem(_bag.At(i)).Value;
+                total += aBoard.GetItem(_bag.NEsimo(i)).Value;
             }
 
             return total;
