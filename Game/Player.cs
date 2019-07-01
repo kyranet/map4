@@ -110,11 +110,12 @@ namespace Game
             var found = false;
             while (!found && i < _bag.CuentaEltos())
             {
-                var item = board.GetItem(_bag.NEsimo(i));
+                var value = _bag.NEsimo(i);
+                var item = board.GetItem(value);
                 if (item.Col == Col && item.Row == Row && board.DropItem(item))
                 {
                     found = true;
-                    _bag.BorraElto(i);
+                    _bag.BorraElto(value);
                 }
                 else
                 {
