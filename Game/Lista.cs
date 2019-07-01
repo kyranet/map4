@@ -4,12 +4,26 @@ namespace Game
 {
     public class Lista
     {
+        /// <summary>
+        /// The internal Nodo class, used to store the internal representation of linked lists.
+        /// </summary>
         private class Nodo
         {
+            /// <summary>
+            /// The value for this node.
+            /// </summary>
             public int dato;
-            public Nodo sig; // enlace al siguiente nodo
+            
+            /// <summary>
+            /// Pointer to the next node.
+            /// </summary>
+            public Nodo sig;
 
-            // Constructoras
+            /// <summary>
+            /// Constructs a new Nodo instance given the value and possible next value.
+            /// </summary>
+            /// <param name="e">The value to be stored in this node.</param>
+            /// <param name="n">The next node, defaults to <c>null</c> if not specified.</param>
             public Nodo(int e, Nodo n = null)
             {
                 dato = e;
@@ -17,22 +31,44 @@ namespace Game
             }
         }
 
-        // Atributos de la lista enlazada: referencia al primero y al último
-        private Nodo pri, ult;
+        /// <summary>
+        /// A pointer to the first element of this linked list.
+        /// </summary>
+        private Nodo pri;
+
+        /// <summary>
+        /// A pointer to the last element of this linked list.
+        /// </summary>
+        private Nodo ult;
+
+        /// <summary>
+        /// The amount of elements this linked list has.
+        /// </summary>
         private int nElems;
 
-        // Constructora de listas
+        /// <summary>
+        /// Constructs a linked list instance.
+        /// </summary>
         public Lista()
         {
             pri = ult = null;
             nElems = 0;
         }
 
+        /// <summary>
+        /// Counts the elements this instance has.
+        /// </summary>
+        /// <returns>The amount of elements this instance has.</returns>
         public int CuentaEltos()
         {
             return nElems;
-        } // Method CuentaEltos
+        }
 
+        /// <summary>
+        /// Accesses to the n-th element from this instance.
+        /// </summary>
+        /// <param name="n">The n-th element to access to.</param>
+        /// <returns>The n-th's element value.</returns>
         public int NEsimo(int n)
         {
             if (n < 0 || n >= nElems)
@@ -48,31 +84,38 @@ namespace Game
                 }
                 return aux.dato;
             }
-        } // Method NEsimo
+        }
 
-        // Insertar elto al final de la lista
+        /// <summary>
+        /// Inserts a value to the end of the linked list.
+        /// </summary>
+        /// <param name="x">The value of the last element to store.</param>
         public void InsertaFin(int x)
         {
-            // si es vacia creamos nodo y apuntamos a el ppi y ult
             if (pri == null)
             {
+                // If the linked list is empty, we will create a new Nodo and point pri and ult to it.
                 pri = new Nodo(x);
                 ult = pri;
             }
             else
             {
-                // si no, creamos nodo apuntado por ult.sig y enlazamos
+                // Otherwise we will create a new Nodo and point it to ult.sig, then link it.
                 ult.sig = new Nodo(x);
                 ult = ult.sig;
                 ult.sig = null;
             }
             nElems++;
-        } // Method InsertaFin
+        }
 
-        // Elimina elto dado de la lista, si esta
+        /// <summary>
+        /// Removes the element with the value of <c>x</c>.
+        /// </summary>
+        /// <param name="x">The value to remove from this linked list.</param>
+        /// <returns><c>true</c>, if an element was removed, <c>false</c> otherwise.</returns>
         public bool BorraElto(int x)
         {
-            // lista vacia
+            // Empty linked list should always return false.
             if (pri == null)
             {
                 return false;
@@ -80,52 +123,52 @@ namespace Game
             else
             {
                 bool result = false;
-                // eliminar el primero
+                // Case for the first element.
                 if (x == pri.dato)
                 {
                     result = true;
                     nElems--;
-                    // si solo tienen un elto
+                    // If it only has one element, point both pri and ult to null.
                     if (pri == ult)
                     {
                         pri = ult = null;
                     }
-                    // si tiene más de uno
+                    // If it has more than one element, point pri to its next element.
                     else
                     {
                         pri = pri.sig;
                     }
                 }
-                // eliminar otro distino al primero
+                // Remove a node different to the first one.
                 else
                 {
-                    // busqueda 
+                    // Search 
                     Nodo aux = pri;
-                    // recorremos lista buscando el ANTERIOR al que hay que eliminar (para poder luego enlazar)
+                    // Traverse the list looking for the previous element of the one we have to remove (for later linking it).
                     while (aux.sig != null && x != aux.sig.dato)
                     {
                         aux = aux.sig;
                     }
 
-                    // si lo encontramos
+                    // If we find it...
                     if (aux.sig != null)
                     {
                         result = true;
                         nElems--;
-                        // si es el ultimo cambiamos referencia al ultimo
+                        // If it is the pre-last, assign it to ult.
                         if (aux.sig == ult)
                         {
                             ult = aux;
                         }
 
-                        // puenteamos
+                        // Perform a pointer bridge.
                         aux.sig = aux.sig.sig;
                     }
                 }
                 return result;
 
             }
-        } // Method BorraElto
+        }
 
-    } // Class Lista
+    }
 }
