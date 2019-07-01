@@ -170,7 +170,7 @@ namespace Game
         /// </summary>
         /// <param name="i">The index in the <c>_itemsInBoard</c> array.</param>
         /// <returns>The item</returns>
-        /// <exception cref="Exception">When the index is either negaative or equals or greater than <c>_itemsCount</c>.</exception>
+        /// <exception cref="Exception">When the index is either negative or equals or greater than <c>_itemsCount</c>.</exception>
         public Item GetItem(int i)
         {
             if (i >= 0 && i < _itemsCount)
@@ -186,6 +186,7 @@ namespace Game
         /// </summary>
         /// <param name="item">The Item instance to be dropped into the board.</param>
         /// <returns><c>true</c> if it was successfully dropped into the board, <c>false</c> otherwise.</returns>
+        /// <exception cref="IndexOutOfRangeException">When the item has malformed <c>Row</c> and or <c>Col</c> values.</exception>
         public bool DropItem(Item item)
         {
             var existent = _map[item.Row, item.Col];
