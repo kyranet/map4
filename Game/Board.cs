@@ -135,21 +135,15 @@ namespace Game
             var numReturn = -1;
             if (!ContainsItem(row, col)) return numReturn;
 
+            var stop = false;
             var aux = 0;
-            while (aux < _itemsCount)
+            while (!stop && aux < _itemsCount)
             {
                 if (_itemsInBoard[aux].Row == row && _itemsInBoard[aux].Col == col)
                 {
                     _map[row, col] = 'O';
-                    numReturn = _itemsInBoard[aux].Value;
-
-                    // If an item was found, move all the items ahead to the previous
-                    // index and reduce itemsCount by one.
-                    --_itemsCount;
-                    for (; aux < _itemsCount; ++aux)
-                    {
-                        _itemsInBoard[aux] = _itemsInBoard[aux + 1];
-                    }
+                    numReturn = aux;
+                    stop = true;
                 }
                 else
                 {
@@ -169,7 +163,7 @@ namespace Game
         /// <param name="col">Column</param>
         public bool IsGoalAt(int row, int col)
         {
-            return _map[row, col] == 'g';
+            return row >= 0 && row < _rows && col >= 0 && col < _cols && _map[row, col] == 'g';
         }
 
         /// <summary>
@@ -188,19 +182,17 @@ namespace Game
             throw new Exception("Item index error.");
         }
 
-        public bool DropItem(int row, int col, int item)
+        public bool DropItem(Item item)
         {
-            if (row < 0 || row >= _rows || col < 0 || col >= _cols || _map[row, col] != 'O') return false;
+            var existent = _map[item.Row, item.Col];
+            var dropped = false;
+            if (existent == 'O')
+            {
+                _map[item.Row, item.Col] = 'i';
+                dropped = true;
+            }
 
-            // Cannot expand, this is a guard to avoid out-of-bounds exceptions.
-            if (_itemsCount == _itemsInBoard.Length) return false;
-
-            _map[row, col] = 'i';
-            _itemsInBoard[_itemsCount].Value = item;
-            _itemsInBoard[_itemsCount].Col = col;
-            _itemsInBoard[_itemsCount].Row = row;
-            ++_itemsCount;
-            return true;
+            return dropped;
         }
 
         /// <summary>

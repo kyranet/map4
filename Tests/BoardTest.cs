@@ -124,22 +124,22 @@ namespace Tests
         public void GetItem_OutOfBounds()
         {
             Assert.Throws<Exception>(() => { Board.GetItem(3); },
-                "you have taken an item outside the limits of the map ");
+                "you have taken an item outside the limits of the map.");
         }
 
         [Test]
         public void DropItem_Empty()
         {
-            Assert.IsFalse(Board.ContainsItem(2, 2), "The cell should be initially empty");
-            Assert.IsTrue(Board.DropItem(2, 2, 1), "As the cell is empty, the item should be dropped");
-            Assert.IsTrue(Board.ContainsItem(2, 2), "As the cell is not longer empty, this should be true");
+            Assert.IsFalse(Board.ContainsItem(2, 2), "The cell should be empty.");
+            Assert.IsFalse(Board.DropItem(Board.GetItem(0)), "The cell never had an item, so it is not possible to drop one here.");
+            Assert.IsFalse(Board.ContainsItem(2, 2), "The cell should be empty.");
         }
 
         [Test]
         public void DropItem_NotEmptyWall()
         {
             Assert.IsFalse(Board.ContainsItem(1, 1));
-            Assert.IsFalse(Board.DropItem(1, 1, 1));
+            Assert.IsFalse(Board.DropItem(Board.GetItem(0)));
             Assert.IsFalse(Board.ContainsItem(1, 1));
         }
 
@@ -147,7 +147,7 @@ namespace Tests
         public void DropItem_NotEmptyGoal()
         {
             Assert.IsFalse(Board.ContainsItem(0, 2), "There cannot be an item in the goal");
-            Assert.IsFalse(Board.DropItem(0, 2, 1), "It is not possible to drop an item in the goal");
+            Assert.IsFalse(Board.DropItem(Board.GetItem(0)), "It is not possible to drop an item in the goal");
             Assert.IsFalse(Board.ContainsItem(0, 2),
                 "As it is not possible to drop an item here, it should be false");
         }

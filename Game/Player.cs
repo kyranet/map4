@@ -104,7 +104,25 @@ namespace Game
 
         public bool DropItem(Board board)
         {
-            return _bag.Count != 0 && board.DropItem(Row, Col, _bag.At(_bag.Count - 1));
+            if (_bag.Count == 0) return false;
+
+            var i = 0;
+            var found = false;
+            while (!found && i < _bag.Count)
+            {
+                var item = board.GetItem(_bag.At(i));
+                if (item.Col == Col && item.Row == Row && board.DropItem(item))
+                {
+                    found = true;
+                    _bag.RemoveAt(i);
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+
+            return found;
         }
 
         /// <summary>
