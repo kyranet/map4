@@ -16,6 +16,7 @@ namespace Game
             board.AddItem(2, 2, 5);
             var player = new Player();
             board.PrintMap();
+            PrintPlayerInfo(board, player);
 
             var gameOver = false;
             while (!gameOver)
@@ -26,7 +27,11 @@ namespace Game
 
                 if (player.PickItem(board))
                 {
-                    Console.WriteLine("Player picked an item.");
+                    Console.WriteLine("Player picked an item");
+                }
+                else if (player.DropItem(board))
+                {
+                    Console.WriteLine("Player dropped an item");
                 }
 
                 PrintPlayerInfo(board, player);
@@ -34,27 +39,26 @@ namespace Game
             }
 
             Console.WriteLine("Player reached the goal");
-            Console.ReadKey();
         }
 
         // Manage the entry of the input
         private static void InputController(Board board, Player player)
         {
             Console.SetCursorPosition(21, 0);
-            var key = Console.ReadLine();
+            var key = Console.ReadKey();
 
-            switch (key)
+            switch (key.Key)
             {
-                case "a":
+                case ConsoleKey.A:
                     player.Move(board, Direction.West);
                     break;
-                case "s":
+                case ConsoleKey.S:
                     player.Move(board, Direction.South);
                     break;
-                case "w":
+                case ConsoleKey.W:
                     player.Move(board, Direction.North);
                     break;
-                case "d":
+                case ConsoleKey.D:
                     player.Move(board, Direction.East);
                     break;
             }
@@ -72,9 +76,7 @@ namespace Game
         private static void PrintPlayerPos(Player player)
         {
             Console.SetCursorPosition(player.Col, player.Row);
-            Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("*");
-            Console.ResetColor();
         }
     }
 }

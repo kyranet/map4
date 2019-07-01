@@ -108,7 +108,7 @@ namespace Game
         public bool AddItem(int row, int col, int value)
         {
             if (row < 0 || row >= _rows || col < 0 || col >= _cols) return false;
-            if (_itemsCount == _itemsInBoard.Length || _map[row, col] != 'O') return false;
+            if (_itemsCount == _itemsInBoard.Length || _map[row, col] != '0') return false;
 
             var currItem = new Item
             {
@@ -141,7 +141,7 @@ namespace Game
             {
                 if (_itemsInBoard[aux].Row == row && _itemsInBoard[aux].Col == col)
                 {
-                    _map[row, col] = 'O';
+                    _map[row, col] = '0';
                     numReturn = aux;
                     stop = true;
                 }
@@ -186,7 +186,7 @@ namespace Game
         {
             var existent = _map[item.Row, item.Col];
             var dropped = false;
-            if (existent == 'O')
+            if (existent == '0')
             {
                 _map[item.Row, item.Col] = 'i';
                 dropped = true;
@@ -208,26 +208,20 @@ namespace Game
                     switch (_map[i, j])
                     {
                         case '0':
-                            Console.ForegroundColor = ConsoleColor.Gray;
                             Console.Write("0");
                             break;
                         case 'w':
-                            Console.ForegroundColor = ConsoleColor.Magenta;
                             Console.Write("w");
                             break;
                         case 'i':
-                            Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.Write("i");
                             break;
                         case 'g':
-                            Console.ForegroundColor = ConsoleColor.Blue;
                             Console.Write("g");
                             break;
                         default:
                             throw new NotImplementedException("Unreachable.");
                     }
-
-                    Console.ResetColor();
                 }
 
                 Console.WriteLine();

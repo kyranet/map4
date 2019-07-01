@@ -15,7 +15,7 @@ namespace Tests
             // iOg
             // iwO
             // OOO
-            Board = new Board(3, 3, "OOg" + "OwO" + "OOO", 3);
+            Board = new Board(3, 3, "00g" + "0w0" + "000", 3);
             Board.AddItem(0, 0, 2);
             Board.AddItem(0, 1, 4);
         }
