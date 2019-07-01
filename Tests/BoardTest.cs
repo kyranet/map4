@@ -124,7 +124,14 @@ namespace Tests
         public void GetItem_OutOfBounds()
         {
             Assert.Throws<Exception>(() => { Board.GetItem(3); },
-                "you have taken an item outside the limits of the map.");
+                "The board only has 2 elements, the 3-th element does not exist.");
+        }
+
+        [Test]
+        public void GetItem_Negative()
+        {
+            Assert.Throws<Exception>(() => { Board.GetItem(-1); },
+                "n-th elements are always positive, throwing an error if it is negative.");
         }
 
         [Test]
