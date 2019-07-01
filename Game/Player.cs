@@ -5,19 +5,22 @@ namespace Game
     public class Player
     {
         /// <summary>
-        /// Player position
+        /// Player position in rows.
         /// </summary>
         public int Row { get; set; }
 
+        /// <summary>
+        /// Player position in columns.
+        /// </summary>
         public int Col { get; set; }
 
         /// <summary>
-        /// A bag containing the items collected
+        /// A bag containing the items collected.
         /// </summary>
         private readonly Lista _bag;
 
         /// <summary>
-        /// The player starts at 0,0 and with an empty bag
+        /// The player starts at 0,0 and with an empty bag.
         /// </summary>
         public Player()
         {
@@ -28,11 +31,11 @@ namespace Game
 
         /// <summary>
         /// Checks if the player can move one step in a concrete direction in a board. The player can move is 
-        /// the next position in this direction is not a wall
+        /// the next position in this direction is not a wall.
         /// </summary>
+        /// <param name="aBoard">The board where the player is moving.</param>
+        /// <param name="dir">Movement direction.</param>
         /// <returns><c>true</c>, if the player can move, <c>false</c> otherwise.</returns>
-        /// <param name="aBoard">The board where the player is moving</param>
-        /// <param name="dir">Movement direction</param>
         public bool CanMoveInDirection(Board aBoard, Direction dir)
         {
             int x = Col, y = Row;
@@ -62,9 +65,9 @@ namespace Game
         /// Player position is updated when the movement finishes.
         /// Returns whether the player has moved at least one position.
         /// </summary>
+        /// <param name="aBoard">The board where the player is moving.</param>
+        /// <param name="dir">Movement direction.</param>
         /// <returns><c>true</c>, if the player has moved at least one position, <c>false</c> otherwise.</returns>
-        /// <param name="aBoard">The board where the player is moving</param>
-        /// <param name="dir">Movement direction</param>
         public bool Move(Board aBoard, Direction dir)
         {
             if (!CanMoveInDirection(aBoard, dir)) return false;
@@ -91,10 +94,9 @@ namespace Game
 
         /// <summary>
         /// Try to pick an item contained in player's position and store it in the bag.
-        /// Return whether the player picks an item.
         /// </summary>
+        /// <param name="aBoard">The board where the player is moving.</param>
         /// <returns><c>true</c>, if there is an item in player's position <c>false</c> otherwise.</returns>
-        /// <param name="aBoard">The board where the player is moving</param>
         public bool PickItem(Board aBoard)
         {
             if (!aBoard.ContainsItem(Row, Col)) return false;
@@ -102,6 +104,12 @@ namespace Game
             return true;
         }
 
+        /// <summary>
+        /// Tries to drop an item contained in the player's bag into the position, it can
+        /// only drop the item picked in the player's current position.
+        /// </summary>
+        /// <param name="board">The board where the player is moving.</param>
+        /// <returns><c>true</c>, if an item was dropped at the player's position <c>false</c> otherwise.</returns>
         public bool DropItem(Board board)
         {
             if (_bag.CuentaEltos() == 0) return false;
@@ -127,10 +135,11 @@ namespace Game
         }
 
         /// <summary>
-        /// Returns the total value of the items stored in player's bag
+        /// Returns the total value of the items stored in player's bag.
         /// </summary>
-        /// <returns>The sum of the values of the collected items</returns>
+        /// <returns>The sum of the values of the collected items.</returns>
         /// <param name="aBoard">The board where the player is moving.</param>
+        /// <returns>The summed value of all items from the bag.</returns>
         public int InventoryValue(Board aBoard)
         {
             var total = 0;
@@ -145,8 +154,8 @@ namespace Game
         /// <summary>
         /// Checks if the player arrives at a goal position
         /// </summary>
-        /// <returns><c>true</c>, if the player position is a goal <c>false</c> otherwise.</returns>
         /// <param name="aBoard">The board where the player is moving.</param>
+        /// <returns><c>true</c>, if the player position is a goal <c>false</c> otherwise.</returns>
         public bool GoalReached(Board aBoard)
         {
             return aBoard.IsGoalAt(Row, Col);
